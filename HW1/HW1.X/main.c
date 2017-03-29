@@ -64,9 +64,12 @@ int main() {
 	    // use _CP0_SET_COUNT(0) and _CP0_GET_COUNT() to test the PIC timing
 		  // remember the core timer runs at half the CPU speed
         
-        if (_CP0_GET_COUNT() > 24000) {
-            LATAINV = 0100; // invert value of RA4 (toggle LED)
+        if ( _CP0_GET_COUNT() > 12000 ) {
             _CP0_SET_COUNT(0);
+            LATAINV = 0x10; // invert value of RA4 (toggle LED)
         }
+//        while ( PORTBbits.RB4 == 0 ) {
+//            delay(1);
+//        }
     }
 }
