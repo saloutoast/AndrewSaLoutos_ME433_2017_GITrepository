@@ -60,12 +60,13 @@ int main() {
         
     __builtin_enable_interrupts();
 
-//    while(1) {
-//	    // use _CP0_SET_COUNT(0) and _CP0_GET_COUNT() to test the PIC timing
-//		  // remember the core timer runs at half the CPU speed
-//        _CP0_SET_COUNT(0);
-//        if (_CP0_GET_COUNT() > 24000) {
-//            LATAINV = 1000; // invert value of RA4 (toggle LED)
-//        }
-//    }
+    while(1) {
+	    // use _CP0_SET_COUNT(0) and _CP0_GET_COUNT() to test the PIC timing
+		  // remember the core timer runs at half the CPU speed
+        
+        if (_CP0_GET_COUNT() > 24000) {
+            LATAINV = 0100; // invert value of RA4 (toggle LED)
+            _CP0_SET_COUNT(0);
+        }
+    }
 }
