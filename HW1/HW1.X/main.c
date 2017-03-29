@@ -65,7 +65,7 @@ int main() {
 		  // remember the core timer runs at half the CPU speed
         _CP0_SET_COUNT(0);
         if (_CP0_GET_COUNT() > 24000) {
-            LATAINV = 0x4; // invert value of RA4 (toggle LED)
+            LATAINV = 1000; // invert value of RA4 (toggle LED)
         }
     }
 }
