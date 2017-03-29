@@ -68,8 +68,8 @@ int main() {
             _CP0_SET_COUNT(0);
             LATAINV = 0x10; // invert value of RA4 (toggle LED)
         }
-//        while ( PORTBbits.RB4 == 0 ) {
-//            delay(1);
-//        }
+        while ( !PORTBbits.RB4 ) { // read RB4 (0 if push button is pressed)
+            _CP0_SET_COUNT(0); 
+        }
     }
 }
