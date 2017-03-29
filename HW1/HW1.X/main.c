@@ -54,11 +54,18 @@ int main() {
     DDPCONbits.JTAGEN = 0;
 
     // do your TRIS and LAT commands here
-
+    TRISAbits.TRISA4 = 0; // pin RA4 is an output pin (LED)
+    LATAbits.LATA4 = 1; // default output on RA4 is high (LED is on)
+    TRISBbits.TRISB4 = 1; // pin RB4 is an input pin (push button)
+        
     __builtin_enable_interrupts();
 
     while(1) {
 	    // use _CP0_SET_COUNT(0) and _CP0_GET_COUNT() to test the PIC timing
 		  // remember the core timer runs at half the CPU speed
+        _CP0_SET_COUNT(0);
+        if (_CP0_GET_COUNT() > 24000) {
+            LATAINV = 0x4; // invert value of RA4 (toggle LED)
+        }
     }
 }
