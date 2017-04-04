@@ -12277,7 +12277,7 @@ Source: www.kingbright.com</description>
 <part name="+3V3" library="433_lib" deviceset="+3V3" device=""/>
 <part name="R1" library="433_lib" deviceset="R-US_" device="0207/10" value="10k"/>
 <part name="R2" library="433_lib" deviceset="R-US_" device="0207/10" value="330"/>
-<part name="LED1" library="433_lib" deviceset="LED" device="3MM"/>
+<part name="LED1" library="433_lib" deviceset="LED" device="3MM" value="Green"/>
 <part name="GND4" library="433_lib" deviceset="GND" device=""/>
 <part name="U$3" library="433_lib" deviceset="PICKIT_CONN" device=""/>
 <part name="+3V4" library="433_lib" deviceset="+3V3" device=""/>
@@ -12295,7 +12295,7 @@ Source: www.kingbright.com</description>
 <part name="C6" library="433_lib" deviceset="C-US" device="050-030X075" value="0.1uF"/>
 <part name="C7" library="433_lib" deviceset="CPOL-US" device="E2.5-6" value="10uF"/>
 <part name="+3V6" library="433_lib" deviceset="+3V3" device=""/>
-<part name="LED2" library="433_lib" deviceset="LED" device="3MM"/>
+<part name="LED2" library="433_lib" deviceset="LED" device="3MM" value="Red"/>
 <part name="R4" library="433_lib" deviceset="R-US_" device="0207/10" value="330"/>
 <part name="GND9" library="433_lib" deviceset="GND" device=""/>
 <part name="U$8" library="433_lib" deviceset="SLIDE" device=""/>
@@ -12362,7 +12362,7 @@ Source: www.kingbright.com</description>
 <instance part="+3V6" gate="G$1" x="60.96" y="-55.88" rot="R270"/>
 <instance part="LED2" gate="G$1" x="40.64" y="-60.96" smashed="yes">
 <attribute name="NAME" x="41.656" y="-65.532" size="1.778" layer="95"/>
-<attribute name="VALUE" x="46.355" y="-65.532" size="1.778" layer="96" rot="R90"/>
+<attribute name="VALUE" x="42.799" y="-63.246" size="1.778" layer="96"/>
 </instance>
 <instance part="R4" gate="G$1" x="40.64" y="-73.66" smashed="yes" rot="R90">
 <attribute name="NAME" x="41.6814" y="-72.39" size="1.778" layer="95"/>

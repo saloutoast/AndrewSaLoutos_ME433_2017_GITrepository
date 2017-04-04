@@ -8689,6 +8689,26 @@ Source: http://www.ledtronics.com/ds/smd-0603/Dstr0092.pdf</description>
 <text x="5.08" y="2.54" size="1.27" layer="21">&gt;NAME</text>
 <text x="5.08" y="0" size="1.27" layer="21">&gt;VALUE</text>
 </package>
+<package name="8PIN_HEADER">
+<description>&lt;h3&gt;Plated Through Hole -8 Pin No Silk&lt;/h3&gt;
+&lt;p&gt;Specifications:
+&lt;ul&gt;&lt;li&gt;Pin count:8&lt;/li&gt;
+&lt;li&gt;Pin pitch:0.1"&lt;/li&gt;
+&lt;/ul&gt;&lt;/p&gt;
+&lt;p&gt;Example device(s):
+&lt;ul&gt;&lt;li&gt;CONN_08&lt;/li&gt;
+&lt;/ul&gt;&lt;/p&gt;</description>
+<pad name="1" x="0" y="0" drill="1.016" diameter="1.8796" rot="R90"/>
+<pad name="2" x="2.54" y="0" drill="1.016" diameter="1.8796" rot="R90"/>
+<pad name="3" x="5.08" y="0" drill="1.016" diameter="1.8796" rot="R90"/>
+<pad name="4" x="7.62" y="0" drill="1.016" diameter="1.8796" rot="R90"/>
+<pad name="5" x="10.16" y="0" drill="1.016" diameter="1.8796" rot="R90"/>
+<pad name="6" x="12.7" y="0" drill="1.016" diameter="1.8796" rot="R90"/>
+<pad name="7" x="15.24" y="0" drill="1.016" diameter="1.8796" rot="R90"/>
+<pad name="8" x="17.78" y="0" drill="1.016" diameter="1.8796" rot="R90"/>
+<text x="-1.27" y="1.397" size="0.6096" layer="25" font="vector" ratio="20">&gt;NAME</text>
+<text x="-1.27" y="-2.032" size="0.6096" layer="27" font="vector" ratio="20">&gt;VALUE</text>
+</package>
 </packages>
 <symbols>
 <symbol name="PIC32MX250F128B">
@@ -8856,6 +8876,7 @@ Source: http://www.ledtronics.com/ds/smd-0603/Dstr0092.pdf</description>
 <pin name="IN" x="-7.62" y="0" visible="off" length="middle"/>
 <pin name="OUT" x="7.62" y="0" visible="off" length="middle" rot="R180"/>
 <wire x1="-2.54" y1="0" x2="2.54" y2="2.54" width="0.254" layer="94"/>
+<text x="-2.54" y="5.08" size="1.27" layer="94">&lt;NAME</text>
 </symbol>
 <symbol name="USBMINI_GOOD">
 <pin name="VBUS" x="-7.62" y="5.08" visible="pin" length="middle"/>
@@ -8893,6 +8914,21 @@ Source: http://www.ledtronics.com/ds/smd-0603/Dstr0092.pdf</description>
 <wire x1="7.62" y1="-2.54" x2="7.62" y2="10.16" width="0.254" layer="94"/>
 <wire x1="7.62" y1="10.16" x2="-7.62" y2="10.16" width="0.254" layer="94"/>
 <wire x1="-7.62" y1="10.16" x2="-7.62" y2="-2.54" width="0.254" layer="94"/>
+</symbol>
+<symbol name="8PIN_HEADER">
+<pin name="1" x="-7.62" y="10.16" visible="pin" length="middle"/>
+<pin name="2" x="-7.62" y="7.62" visible="pin" length="middle"/>
+<pin name="3" x="-7.62" y="5.08" visible="pin" length="middle"/>
+<pin name="4" x="-7.62" y="2.54" visible="pin" length="middle"/>
+<pin name="5" x="-7.62" y="0" visible="pin" length="middle"/>
+<pin name="6" x="-7.62" y="-2.54" visible="pin" length="middle"/>
+<pin name="7" x="-7.62" y="-5.08" visible="pin" length="middle"/>
+<pin name="8" x="-7.62" y="-7.62" visible="pin" length="middle"/>
+<wire x1="-5.08" y1="12.7" x2="-5.08" y2="-10.16" width="0.254" layer="94"/>
+<wire x1="-5.08" y1="-10.16" x2="2.54" y2="-10.16" width="0.254" layer="94"/>
+<wire x1="2.54" y1="-10.16" x2="2.54" y2="12.7" width="0.254" layer="94"/>
+<wire x1="2.54" y1="12.7" x2="-5.08" y2="12.7" width="0.254" layer="94"/>
+<text x="-5.08" y="12.7" size="1.27" layer="94">&gt;NAME</text>
 </symbol>
 </symbols>
 <devicesets>
@@ -12167,6 +12203,28 @@ Source: www.kingbright.com</description>
 </device>
 </devices>
 </deviceset>
+<deviceset name="8PIN_HEADER">
+<gates>
+<gate name="G$1" symbol="8PIN_HEADER" x="2.54" y="-2.54"/>
+</gates>
+<devices>
+<device name="" package="8PIN_HEADER">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+<connect gate="G$1" pin="2" pad="2"/>
+<connect gate="G$1" pin="3" pad="3"/>
+<connect gate="G$1" pin="4" pad="4"/>
+<connect gate="G$1" pin="5" pad="5"/>
+<connect gate="G$1" pin="6" pad="6"/>
+<connect gate="G$1" pin="7" pad="7"/>
+<connect gate="G$1" pin="8" pad="8"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
 </devicesets>
 </library>
 </libraries>
@@ -12202,8 +12260,8 @@ Source: www.kingbright.com</description>
 <part name="GND5" library="433_lib" deviceset="GND" device=""/>
 <part name="GND6" library="433_lib" deviceset="GND" device=""/>
 <part name="R3" library="433_lib" deviceset="R-US_" device="0207/10" value="10k"/>
-<part name="U$4" library="433_lib" deviceset="PUSH_BUTTON" device=""/>
-<part name="U$5" library="433_lib" deviceset="PUSH_BUTTON" device=""/>
+<part name="RESET" library="433_lib" deviceset="PUSH_BUTTON" device=""/>
+<part name="USER" library="433_lib" deviceset="PUSH_BUTTON" device=""/>
 <part name="U$6" library="433_lib" deviceset="USBMINI_GOOD" device=""/>
 <part name="U$7" library="433_lib" deviceset="MCP1702" device=""/>
 <part name="GND7" library="433_lib" deviceset="GND" device=""/>
@@ -12216,6 +12274,8 @@ Source: www.kingbright.com</description>
 <part name="R4" library="433_lib" deviceset="R-US_" device="0207/10" value="330"/>
 <part name="GND9" library="433_lib" deviceset="GND" device=""/>
 <part name="U$8" library="433_lib" deviceset="SLIDE" device=""/>
+<part name="U$9" library="433_lib" deviceset="8PIN_HEADER" device=""/>
+<part name="U$10" library="433_lib" deviceset="8PIN_HEADER" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -12257,8 +12317,8 @@ Source: www.kingbright.com</description>
 <instance part="GND5" gate="1" x="-58.42" y="17.78"/>
 <instance part="GND6" gate="1" x="-20.32" y="22.86"/>
 <instance part="R3" gate="G$1" x="-20.32" y="55.88" rot="R90"/>
-<instance part="U$4" gate="G$1" x="-20.32" y="35.56" smashed="yes" rot="R90"/>
-<instance part="U$5" gate="G$1" x="-40.64" y="-12.7" smashed="yes"/>
+<instance part="RESET" gate="G$1" x="-20.32" y="35.56" smashed="yes" rot="R90"/>
+<instance part="USER" gate="G$1" x="-40.64" y="-12.7" smashed="yes"/>
 <instance part="U$6" gate="G$1" x="-86.36" y="-60.96" rot="MR0"/>
 <instance part="U$7" gate="G$1" x="-17.78" y="-55.88"/>
 <instance part="GND7" gate="1" x="-73.66" y="-73.66"/>
@@ -12280,6 +12340,8 @@ Source: www.kingbright.com</description>
 </instance>
 <instance part="GND9" gate="1" x="40.64" y="-83.82"/>
 <instance part="U$8" gate="G$1" x="-53.34" y="-48.26"/>
+<instance part="U$9" gate="G$1" x="27.94" y="43.18"/>
+<instance part="U$10" gate="G$1" x="43.18" y="43.18" rot="MR0"/>
 </instances>
 <busses>
 </busses>
@@ -12347,7 +12409,7 @@ Source: www.kingbright.com</description>
 </segment>
 <segment>
 <pinref part="GND6" gate="1" pin="GND"/>
-<pinref part="U$4" gate="G$1" pin="IN"/>
+<pinref part="RESET" gate="G$1" pin="IN"/>
 <wire x1="-20.32" y1="25.4" x2="-20.32" y2="27.94" width="0.1524" layer="91"/>
 </segment>
 <segment>
@@ -12505,20 +12567,20 @@ Source: www.kingbright.com</description>
 <pinref part="R3" gate="G$1" pin="1"/>
 <wire x1="-20.32" y1="50.8" x2="-20.32" y2="45.72" width="0.1524" layer="91"/>
 <junction x="-20.32" y="45.72"/>
-<pinref part="U$4" gate="G$1" pin="OUT"/>
+<pinref part="RESET" gate="G$1" pin="OUT"/>
 <wire x1="-20.32" y1="43.18" x2="-20.32" y2="45.72" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$4" class="0">
 <segment>
 <pinref part="R1" gate="G$1" pin="2"/>
-<pinref part="U$5" gate="G$1" pin="IN"/>
+<pinref part="USER" gate="G$1" pin="IN"/>
 <wire x1="-50.8" y1="-12.7" x2="-48.26" y2="-12.7" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$10" class="0">
 <segment>
-<pinref part="U$5" gate="G$1" pin="OUT"/>
+<pinref part="USER" gate="G$1" pin="OUT"/>
 <wire x1="-33.02" y1="-12.7" x2="-30.48" y2="-12.7" width="0.1524" layer="91"/>
 <wire x1="-30.48" y1="-12.7" x2="-30.48" y2="-10.16" width="0.1524" layer="91"/>
 <pinref part="U$1" gate="G$1" pin="11.RB4"/>
