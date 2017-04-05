@@ -163,8 +163,9 @@
 <vertex x="1.275" y="48.575"/>
 <vertex x="2.29" y="49.75"/>
 </polygon>
-<text x="0.725" y="0.475" size="1.27" layer="21">Andrew SaLoutos
+<text x="1.3" y="1.25" size="1.27" layer="21">Andrew SaLoutos
 ME 433 2017</text>
+<text x="28.315" y="0.525" size="1.016" layer="21">OFF             ON</text>
 </plain>
 <libraries>
 <library name="433_lib">

@@ -698,8 +698,7 @@ design rules under a new name.</description>
 <element name="C1" library="433_lib" package="C050-030X075" value="0.1uF" x="26.41" y="38.76" rot="R270"/>
 <element name="C2" library="433_lib" package="C050-030X075" value="0.1uF" x="33.47" y="24.085" rot="R270"/>
 <element name="C3" library="433_lib" package="C050-030X075" value="0.1uF" x="7.915" y="8.84" smashed="yes" rot="R90">
-<attribute name="NAME" x="10.96" y="10.484" size="1.27" layer="25" ratio="10" rot="R90"/>
-<attribute name="VALUE" x="10.963" y="5.284" size="1.27" layer="27" ratio="10" rot="R90"/>
+<attribute name="VALUE" x="6.138" y="12.284" size="1.27" layer="27" ratio="10" rot="R180"/>
 </element>
 <element name="C4" library="433_lib" package="E2,5-6" value="10uF" x="27.005" y="24.32" rot="R90"/>
 <element name="C5" library="433_lib" package="C050-030X075" value="0.1uF" x="33.06" y="9.855" rot="R180"/>
@@ -718,8 +717,10 @@ design rules under a new name.</description>
 <element name="R3" library="433_lib" package="0207/10" value="10k" x="8.83" y="34.875" rot="R270"/>
 <element name="R4" library="433_lib" package="0207/10" value="330" x="42.025" y="43.67" rot="R180"/>
 <element name="U$1" library="433_lib" package="DIL28-3" value="PIC32MX250F128B" x="17.225" y="22.8" rot="R270"/>
-<element name="CRYSTAL_OSC" library="433_lib" package="1X03" value="8 MHz" x="8.97" y="20.24" rot="R270"/>
-<element name="U$3" library="433_lib" package="1X05" value="PICKIT_CONN" x="1.27" y="46.99" rot="R270"/>
+<element name="CRYSTAL_OSC" library="433_lib" package="1X03" value="8 MHz" x="8.97" y="20.24" smashed="yes" rot="R270">
+<attribute name="VALUE" x="6.938" y="21.51" size="0.6096" layer="27" font="vector" ratio="20" rot="R270"/>
+</element>
+<element name="U$3" library="433_lib" package="1X05" value="PICKIT_CONN" x="1.27" y="46.99" smashed="yes" rot="R270"/>
 <element name="RESET" library="433_lib" package="PUSH_BUTTON" value="PUSH_BUTTON" x="15.115" y="46.265"/>
 <element name="USER" library="433_lib" package="PUSH_BUTTON" value="PUSH_BUTTON" x="6.105" y="46.245"/>
 <element name="U$6" library="433_lib" package="USB-MB-H" value="USBMINI" x="45.485" y="8.795" smashed="yes" rot="R180">
@@ -730,7 +731,7 @@ design rules under a new name.</description>
 <attribute name="NAME" x="28.955" y="6.705" size="1.27" layer="21"/>
 <attribute name="VALUE" x="33.355" y="6.765" size="1.27" layer="21"/>
 </element>
-<element name="U$9" library="433_lib" package="8PIN_HEADER" value="8PIN_HEADER" x="1.27" y="34.29" rot="R270"/>
+<element name="U$9" library="433_lib" package="8PIN_HEADER" value="8PIN_HEADER" x="1.27" y="34.29" smashed="yes" rot="R270"/>
 <element name="U$10" library="433_lib" package="8PIN_HEADER" value="8PIN_HEADER" x="48.768" y="34.29" rot="R270"/>
 </elements>
 <signals>

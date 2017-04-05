@@ -159,7 +159,7 @@
 <wire x1="50" y1="50" x2="0" y2="50" width="0" layer="20"/>
 <wire x1="0" y1="50" x2="0" y2="0" width="0" layer="20"/>
 <polygon width="0.254" layer="21">
-<vertex x="0.2" y="49.75"/>
+<vertex x="0.275" y="49.75"/>
 <vertex x="1.275" y="48.575"/>
 <vertex x="2.29" y="49.75"/>
 </polygon>
