@@ -87,12 +87,9 @@ int main() {
             } else { 
                 sin_track = 0;
             }
-            sin_volt = (float) sin_track * 255.0/100.0;
-//            sin_val = M_PI * 2 * (double) sin_track;
-//            sin_volt = 254.0 * sin(sin_val);
-//            if (sin_volt < 0) {
-//                sin_volt = -1*sin_volt;
-//            }
+//            sin_volt = (float) sin_track * 255.0/100.0;
+            sin_val = M_PI * (2.0/100.0) * (float) sin_track;
+            sin_volt = (127.5 * sin(sin_val)) + 127.5;
             setVoltage(0, (unsigned char) sin_volt);
         }
     }
