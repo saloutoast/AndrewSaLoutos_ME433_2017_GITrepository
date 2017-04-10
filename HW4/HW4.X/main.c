@@ -1,7 +1,7 @@
 #include<xc.h>           // processor SFR definitions
 #include<sys/attribs.h>  // __ISR macro
 
-#include "spi.h"
+#include "SPI.h"
 
 // DEVCFG0
 #pragma config DEBUG = 10 // no debugging
@@ -63,19 +63,26 @@ int main() {
     initSPI1(); // initialize SPI peripheral
     
     __builtin_enable_interrupts();
-
-    char channel = 0;
     
-    while(1) {
-        if ( _CP0_GET_COUNT() > 12000 ) {
-            _CP0_SET_COUNT(0);
-            if (channel == 0) {
-                channel = 1;
-            }
-            else if (channel == 1) {
-                channel = 0;
-            }
-            setVoltage(channel, 0b01111111); // set output voltage at 50%, toggle channel
-        }
+//    char voltage = 0;
+    char tri_voltage = 0;
+    char sin_voltage = 0;    
+    
+    while(1) { // update waves at 1 kHz freq
+        // Triangle wave at 5 Hz
+        
+        
+        // Sine wave at 10 Hz
+        
+        
+//        setVoltage(0, voltage);
+//        if (_CP0_GET_COUNT() > 12000000) { // 1/2 second per switch
+//            if (voltage == 0) {
+//                voltage = 0b01111111;
+//            } else {
+//                voltage = 0;
+//            }
+//            _CP0_SET_COUNT(0);
+//        }
     }
 }

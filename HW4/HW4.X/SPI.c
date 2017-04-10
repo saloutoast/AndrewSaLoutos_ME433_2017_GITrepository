@@ -1,6 +1,6 @@
 // SPI functions for ME 433
 
-#include "spi.h"
+#include "SPI.h"
 
 #define SS1 LATBbits.LATB15
 
@@ -10,7 +10,7 @@ void initSPI1() { // function to initialize SPI1 communication
     
     // PIC pins: SS1 (RPB15)), SDO1 (RPB13), SDI1 (RPB8), SCK1 (RPB14)
     SDI1Rbits.SDI1R = 0b0100; // SDI1
-    RPB13Rbits.RPB13 = 0b0011; // SDO1
+    RPB13Rbits.RPB13R = 0b0011; // SDO1
     // Don't need to initialize SCK1?
     // Don't initialize SS1, it will be manually controlled as a digital output
     
