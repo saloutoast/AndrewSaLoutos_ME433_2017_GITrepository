@@ -67,8 +67,8 @@ int main() {
     
 //    char voltage = 0;
     char tri_volt = 0;
-    double sin_volt = 0;
-    char sin_track = 0;
+//    char sin_volt = 0;
+//    char sin_track = 0;
     
     while(1) { // update waves at 1 kHz frequency
         if (_CP0_GET_COUNT() > 24000) { // 24 MHz / 1 kHz = 24000
@@ -80,14 +80,13 @@ int main() {
                 tri_volt = 0;
             }
             setVoltage(0, tri_volt);
+            setVoltage(1, 0);
             // Sine wave at 10 Hz
 //            if (sin_track < 100) {
 //                sin_track = sin_track + 1; // 1 kHz / 10 Hz = 100
 //            } else { 
 //                sin_track = 0;
 //            }
-            sin_volt = 255;    
-            setVoltage(1, (char) sin_volt);
         }
 //        setVoltage(0, voltage);
 //        if (_CP0_GET_COUNT() > 12000000) { // 1/2 second per switch
