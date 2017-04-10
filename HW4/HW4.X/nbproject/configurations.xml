@@ -5,7 +5,6 @@
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>SPI.h</itemPath>
-      <itemPath>waveform.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -16,7 +15,6 @@
                    projectFiles="true">
       <itemPath>main.c</itemPath>
       <itemPath>SPI.c</itemPath>
-      <itemPath>waveform.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

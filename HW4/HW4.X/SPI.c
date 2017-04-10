@@ -42,12 +42,12 @@ void setVoltage(char channel, char voltage) { // function to set DAC voltage
     
     if (channel == 0) { // write to VoutA
         byte1 = (voltage  >> 4);
-        byte1 |= (0b0111 << 4);
+        byte1 |= (0b0011 << 4);
         byte2 = (voltage << 4);
     }
     else if (channel == 1) { // write to VoutB
         byte1 = (voltage  >> 4);
-        byte1 |= (0b1111 << 4);
+        byte1 |= (0b1011 << 4);
         byte2 = (voltage << 4);
     }
     SS1 = 0; // write 2 bytes to DAC

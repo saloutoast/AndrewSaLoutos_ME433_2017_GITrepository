@@ -2,6 +2,7 @@
 #include<sys/attribs.h>  // __ISR macro
 
 #include "SPI.h"
+#include <math.h>
 
 // DEVCFG0
 #pragma config DEBUG = 10 // no debugging
@@ -65,16 +66,29 @@ int main() {
     __builtin_enable_interrupts();
     
 //    char voltage = 0;
-    char tri_voltage = 0;
-    char sin_voltage = 0;    
+    char tri_volt = 0;
+    double sin_volt = 0;
+    char sin_track = 0;
     
-    while(1) { // update waves at 1 kHz freq
-        // Triangle wave at 5 Hz
-        
-        
-        // Sine wave at 10 Hz
-        
-        
+    while(1) { // update waves at 1 kHz frequency
+        if (_CP0_GET_COUNT() > 24000) { // 24 MHz / 1 kHz = 24000
+            _CP0_SET_COUNT(0);
+            // Triangle wave at 5 Hz
+            if (tri_volt < 254) {
+                tri_volt = tri_volt + (255/200); // 1 kHz / 5 Hz = 200
+            } else {
+                tri_volt = 0;
+            }
+            setVoltage(0, tri_volt);
+            // Sine wave at 10 Hz
+//            if (sin_track < 100) {
+//                sin_track = sin_track + 1; // 1 kHz / 10 Hz = 100
+//            } else { 
+//                sin_track = 0;
+//            }
+            sin_volt = 255;    
+            setVoltage(1, (char) sin_volt);
+        }
 //        setVoltage(0, voltage);
 //        if (_CP0_GET_COUNT() > 12000000) { // 1/2 second per switch
 //            if (voltage == 0) {
