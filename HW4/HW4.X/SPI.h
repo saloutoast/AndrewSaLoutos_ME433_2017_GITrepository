@@ -13,7 +13,7 @@
 
 void initSPI1(); // function to initialize SPI1 communication
 char SPI1_io(char write); // function to write through SPI1
-void setVoltage(char channel, char voltage); // function to set DAC voltage 
+void setVoltage(char channel, unsigned char voltage); // function to set DAC voltage 
 
 #endif // SPI__H__
 
