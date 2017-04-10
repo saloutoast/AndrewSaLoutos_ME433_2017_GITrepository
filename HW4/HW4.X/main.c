@@ -67,26 +67,33 @@ int main() {
     
     float tri_volt = 0;
     float sin_volt = 0;
-    float sin_track = 0;
+    unsigned char sin_track = 0;
+    double sin_val = 0;
     
     while(1) { // update waves at 1 kHz frequency
-        if (_CP0_GET_COUNT() > 20000) { // 24 MHz / 1 kHz = 24000
+        if (_CP0_GET_COUNT() > 24000) { // 24 MHz / 1 kHz = 24000 
             _CP0_SET_COUNT(0);
             // Triangle wave at 5 Hz
-            if (tri_volt < 254) {
-                tri_volt = tri_volt + (255/200); // 1 kHz / 5 Hz = 200
+            if (tri_volt < 255) {
+                tri_volt += 255.0/200.0; // 1 kHz / 5 Hz = 200
             } else {
                 tri_volt = 0;
             }
-            setVoltage(0, (unsigned char) tri_volt);
+            setVoltage(1, (unsigned char) tri_volt);
             // setVoltage(1, (unsigned char) tri_volt);
             // Sine wave at 10 Hz
             if (sin_track < 100) {
-                sin_track = sin_track + 1; // 1 kHz / 10 Hz = 100
+                sin_track += 1; // 1 kHz / 10 Hz = 100
             } else { 
                 sin_track = 0;
             }
+            sin_volt = (float) sin_track * 255.0/100.0;
+//            sin_val = M_PI * 2 * (double) sin_track;
+//            sin_volt = 254.0 * sin(sin_val);
+//            if (sin_volt < 0) {
+//                sin_volt = -1*sin_volt;
+//            }
+            setVoltage(0, (unsigned char) sin_volt);
         }
-//        setVoltage(0, voltage);
     }
 }
