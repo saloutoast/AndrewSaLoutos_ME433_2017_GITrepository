@@ -56,15 +56,26 @@ int main() {
     DDPCONbits.JTAGEN = 0;
 
     // do your TRIS and LAT commands here
-    TRISBbits.TRISB14 = 0; // pin B14 is an output pin (SCK1)
-    LATBbits.LATB14 = 1; // default output on RA4 is high (LED is on)
-        
+    TRISAbits.TRISA4 = 0; // pin RA4 is an output pin (LED)
+    LATAbits.LATA4 = 1; // default output on RA4 is high (LED is on)
+    TRISBbits.TRISB4 = 1; // pin RB4 is an input pin (push button)
+    
+    initSPI1(); // initialize SPI peripheral
+    
     __builtin_enable_interrupts();
 
+    char channel = 0;
+    
     while(1) {
-	    if ( _CP0_GET_COUNT() > 12000 ) { // toggle clock pin?
+        if ( _CP0_GET_COUNT() > 12000 ) {
             _CP0_SET_COUNT(0);
-            LAT; // invert value of RA4 (toggle LED)
+            if (channel == 0) {
+                channel = 1;
+            }
+            else if (channel == 1) {
+                channel = 0;
+            }
+            setVoltage(channel, 0b01111111); // set output voltage at 50%, toggle channel
         }
     }
 }
