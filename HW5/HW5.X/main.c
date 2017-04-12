@@ -70,6 +70,8 @@ int main() {
     LATAbits.LATA4 = 1; // default output on RA4 is high (LED is on)
     TRISBbits.TRISB4 = 1; // pin RB4 is an input pin (push button)
     
+    initExpander();
+    
     __builtin_enable_interrupts();
     
         
