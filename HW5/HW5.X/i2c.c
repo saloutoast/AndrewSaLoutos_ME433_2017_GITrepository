@@ -6,7 +6,7 @@
 #include "i2c.h"
 
 void I2C2_master_setup(void) {             // set up I2C2 as a master, at 100 kHz 
-    I2C2BRG = 0x00; // I2CBRG = [1/(2*Fsck) - PGD]*Pblck - 2
+    I2C2BRG = 0xE9; // I2C2BRG = [1/(2*Fsck) - PGD]*Pblck - 2, PGD = 104ns, = 233 = 0xE9
     I2C2CONbits.ON = 1; // turn on the I2C2 module
 }
     

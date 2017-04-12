@@ -31,10 +31,28 @@ void initExpander(void) { // initializes the I/O expander
     I2C2_master_stop();    
 }
 
-void setExpander(char pin, char level) { // sets values of pins on I/O expander
-    ; 
+void setExpander(char pin, char level) { // sets value of a pin on I/O expander, starting with pin 0
+    char byte = 0;
+    (byte | level) << pin;
+    
+    I2C2_master_start(); // begin communication
+    I2C2_master_send(SLAVE_ADDR); // address defaults to write
+    I2C2_master_send(0x09); // send to PORT (GPIO) register
+    I2C2_master_send(byte); // send desired level on desired pin
+    I2C2_master_stop(); // end communication  
 }
 
 char getExpander(void) { // returns values of pins on I/O expander
-    ;
+    char pin_vals;
+    
+    I2C2_master_start(); // begin communication
+    I2C2_master_send(SLAVE_ADDR); // address defaults to write
+    I2C2_master_send(0x09); // identify POIR (GPIO) register, to read from later
+    I2C2_master_restart(); // restart communication
+    I2C2_master_send( SLAVE_ADDR|1 ); // address, with last bit changed to 1 (for reading)
+    pin_vals = I2C2_master_recv(); // save the value returned from the GPIO register
+    I2C2_master_ack(1); // tell slave to stop communicating
+    I2C2_master_stop(); // end communications 
+    
+    return pin_vals;
 }
