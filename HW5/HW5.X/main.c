@@ -11,6 +11,7 @@
 #include<sys/attribs.h>  // __ISR macro
 
 #include "i2c.h"
+#include "expander.h"
 
 // DEVCFG0
 #pragma config DEBUG = OFF // no debugging

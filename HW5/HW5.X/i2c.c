@@ -1,9 +1,11 @@
 // I2C functions for ME 433, HW 5
 // Implement I2C communication with MCP23008 chip, with no interrupts
 
+#include<xc.h>           // processor SFR definitions
+#include<sys/attribs.h>  // __ISR macro
 #include "i2c.h"
 
-void I2C2_master_setup(void) {             // set up I2C2 as a master, at 100 kHz
+void I2C2_master_setup(void) {             // set up I2C2 as a master, at 100 kHz 
     I2C2BRG = 0x00; // I2CBRG = [1/(2*Fsck) - PGD]*Pblck - 2
     I2C2CONbits.ON = 1; // turn on the I2C2 module
 }
