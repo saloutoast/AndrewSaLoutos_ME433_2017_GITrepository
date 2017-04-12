@@ -12,7 +12,7 @@ void initExpander(void) { // initializes the I/O expander
     
     I2C2_master_setup();
     
-    // define slave address? initialize registers and pull up resistors
+    // define slave address? initialize registers and pull up resistors? initialize input and output pins?
     
 }
 
