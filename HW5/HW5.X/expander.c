@@ -32,8 +32,13 @@ void initExpander(void) { // initializes the I/O expander
 }
 
 void setExpander(char pin, char level) { // sets value of a pin on I/O expander, starting with pin 0
-    char byte = 0;
-    (byte | level) << pin;
+    char byte = getExpander(); // get current state of pins on I/O expander
+    if (level == 0) {
+        byte = (byte & ~(1<<pin)); // AND byte with a char of all 1s except for a zero, shifted left by "pin"
+    } else {
+        byte = (byte | (1<<pin)); // OPR byte with a char of all 0s except for a one, shifted left by "pin"
+    }
+    
     
     I2C2_master_start(); // begin communication
     I2C2_master_send(SLAVE_ADDR); // address defaults to write
