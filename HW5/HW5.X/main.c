@@ -75,7 +75,9 @@ int main() {
     __builtin_enable_interrupts();
     
     char current_pin_vals;
-        
+    
+    setExpander(0, 1);
+    
     while(1) { // check push button input pin, and if it is low turn off the LED
         current_pin_vals = getExpander();
         if( (current_pin_vals >> 7) == 0 ) {
