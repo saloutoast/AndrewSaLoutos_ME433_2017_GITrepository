@@ -14,6 +14,7 @@
 // B8 is turned into SDI1 but is not used or connected to anything
 
 #include <xc.h>
+#include<stdio.h>
 #include "ILI9163C.h"
 
 void SPI1_init() {
@@ -188,4 +189,15 @@ void LCD_clearScreen(unsigned short color) {
 		for (i = 0;i < _GRAMSIZE; i++){
 			LCD_data16(color);
 		}
+}
+
+void disp_char(unsigned char c, unsigned short x, unsigned short y, unsigned short color1, unsigned short color2) { // draw character 'c' starting at x,y in color1 with background color2
+}
+
+
+void disp_string(unsigned char c, unsigned short x, unsigned short y, unsigned short color1, unsigned short color2) { // draw string 'c' starting at x,y in color1 with background color2
+}
+
+
+void draw_bar_x(unsigned short x, unsigned short y, unsigned short color, unsigned short len, unsigned short wid) { // draw a bar of 'color', 'len' by 'wid' starting at x,y
 }
