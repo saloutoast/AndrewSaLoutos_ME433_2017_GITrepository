@@ -177,9 +177,9 @@ void LCD_drawPixel(unsigned short, unsigned short, unsigned short); // set the x
 void LCD_setAddr(unsigned short, unsigned short, unsigned short, unsigned short); // set the memory address you are writing to
 void LCD_clearScreen(unsigned short); // set the color of every pixel
 
-void disp_char(unsigned char, unsigned short, unsigned short, unsigned short, unsigned short); // draw character 'c' starting at x,y in color1 with background color2
-void disp_string(unsigned char, unsigned short, unsigned short, unsigned short, unsigned short); // draw string 'c' starting at x,y in color1 with background color2
-void draw_bar_x(unsigned short, unsigned short, unsigned short, unsigned short, unsigned short); // draw a bar of 'color', 'len' by 'wid' starting at x,y
+void LCD_dispChar(unsigned char, unsigned short, unsigned short, unsigned short, unsigned short); // draw character 'c' starting at x,y in color1 with background color2
+void LCD_dispString(unsigned char, unsigned short, unsigned short, unsigned short, unsigned short); // draw string 'c' starting at x,y in color1 with background color2
+void LCD_drawBar_x(unsigned short, unsigned short, unsigned short, unsigned short, unsigned short); // draw a bar of 'color', 'len' by 'wid' starting at x,y
 
 
 #endif

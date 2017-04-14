@@ -191,16 +191,33 @@ void LCD_clearScreen(unsigned short color) {
 		}
 }
 
-void disp_char(unsigned char c, unsigned short x, unsigned short y, unsigned short color1, unsigned short color2) { // draw character 'c' starting at x,y in color1 with background color2
+void LCD_dispChar(unsigned char c, unsigned short x, unsigned short y, unsigned short color1, unsigned short color2) { // draw character 'c' starting at x,y in color1 with background color2
+    char row = c - 20; // in order to access rows of ASCII table in header file
+    int i;
+    int j;
+    char pix;
+    
+    for (i=0; i<5; i=i+1) {
+        for (j=0; j<9; j=j+1) {
+            //if (((x+i)<128) & ((y+j)<128)) { // ensure that pixel to be written to exists
+                pix = ASCII[row][i];
+                pix = (pix >> j) & 1;
+                if (pix == 1) {
+                    LCD_drawPixel( x+i, y+j, color1); // set '1' pixels from ASCII table to color1
+                } else {
+                    LCD_drawPixel( x+i, y+j, color2); // set '0' pixels from ASCII table to color2 (background)
+                }
+            //} 
+        }
+    }
+}
+
+
+void LCD_dispString(unsigned char c, unsigned short x, unsigned short y, unsigned short color1, unsigned short color2) { // draw string 'c' starting at x,y in color1 with background color2
     ;
 }
 
 
-void disp_string(unsigned char c, unsigned short x, unsigned short y, unsigned short color1, unsigned short color2) { // draw string 'c' starting at x,y in color1 with background color2
-    ;
-}
-
-
-void draw_bar_x(unsigned short x, unsigned short y, unsigned short color, unsigned short len, unsigned short wid) { // draw a bar of 'color', 'len' by 'wid' starting at x,y
+void LCD_drawBar_x(unsigned short x, unsigned short y, unsigned short color, unsigned short len, unsigned short wid) { // draw a bar of 'color', 'len' by 'wid' starting at x,y
     ;
 }

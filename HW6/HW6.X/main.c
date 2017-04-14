@@ -66,8 +66,10 @@ int main() {
     
     __builtin_enable_interrupts();
     
+    LCD_clearScreen(0xFFFF);
+    
     while(1) {
-        // print hello world, increment counter, move bar, etc
+        LCD_dispChar(68, 60, 60, 0, 0xFFFF); // print hello world, increment counter, move bar, etc
     }
 }
 
