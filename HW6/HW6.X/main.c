@@ -62,10 +62,12 @@ int main() {
     
     SPI1_init(); // initialize SPI peripheral
     
+    LCD_init(); // initialize the LCD screen
+    
     __builtin_enable_interrupts();
     
     while(1) {
-        ;
+        // print hello world, increment counter, move bar, etc
     }
 }
 

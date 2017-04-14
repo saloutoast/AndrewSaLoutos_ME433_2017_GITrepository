@@ -192,12 +192,15 @@ void LCD_clearScreen(unsigned short color) {
 }
 
 void disp_char(unsigned char c, unsigned short x, unsigned short y, unsigned short color1, unsigned short color2) { // draw character 'c' starting at x,y in color1 with background color2
+    ;
 }
 
 
 void disp_string(unsigned char c, unsigned short x, unsigned short y, unsigned short color1, unsigned short color2) { // draw string 'c' starting at x,y in color1 with background color2
+    ;
 }
 
 
 void draw_bar_x(unsigned short x, unsigned short y, unsigned short color, unsigned short len, unsigned short wid) { // draw a bar of 'color', 'len' by 'wid' starting at x,y
+    ;
 }
