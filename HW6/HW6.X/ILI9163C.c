@@ -14,7 +14,7 @@
 // B8 is turned into SDI1 but is not used or connected to anything
 
 #include <xc.h>
-#include<stdio.h>
+#include <stdio.h>
 #include "ILI9163C.h"
 
 void SPI1_init() {
@@ -192,7 +192,7 @@ void LCD_clearScreen(unsigned short color) {
 }
 
 void LCD_dispChar(unsigned char c, unsigned short x, unsigned short y, unsigned short color1, unsigned short color2) { // draw character 'c' starting at x,y in color1 with background color2
-    char row = c - 20; // in order to access rows of ASCII table in header file
+    char row = c - 0x20; // in order to access rows of ASCII table in header file
     int i;
     int j;
     char pix;
@@ -213,11 +213,22 @@ void LCD_dispChar(unsigned char c, unsigned short x, unsigned short y, unsigned 
 }
 
 
-void LCD_dispString(unsigned char c, unsigned short x, unsigned short y, unsigned short color1, unsigned short color2) { // draw string 'c' starting at x,y in color1 with background color2
-    ;
+void LCD_dispString(char*msg, unsigned short x, unsigned short y, unsigned short color1, unsigned short color2) { // draw string 'c' starting at x,y in color1 with background color2
+    int i = 0;
+    
+    while (msg[i] != 0) {
+        LCD_dispChar( (unsigned char) msg[i], (x+(5*i)), y, color1, color2);
+        i += 1;
+    }
 }
 
 
 void LCD_drawBar_x(unsigned short x, unsigned short y, unsigned short color, unsigned short len, unsigned short wid) { // draw a bar of 'color', 'len' by 'wid' starting at x,y
-    ;
+    int i;
+    int j;
+    for (i=0; i<=len; i+=1) {
+        for (j=0; j<=wid; j+=1) {
+            LCD_drawPixel((x+i), (y+j), color);
+        }
+    }
 }

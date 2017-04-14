@@ -1,6 +1,6 @@
-#include<xc.h>           // processor SFR definitions
-#include<sys/attribs.h>  // __ISR macro
-
+#include <xc.h>           // processor SFR definitions
+#include <sys/attribs.h>  // __ISR macro
+#include <stdio.h>
 #include "ILI9163C.h"
 
 // DEVCFG0
@@ -68,8 +68,30 @@ int main() {
     
     LCD_clearScreen(0xFFFF);
     
+    char msg[100];
+    char num[10];
+    sprintf(msg, "Hello world!");
+    
+    int j = 0;
+    
+    LCD_dispString(msg, 25, 40, 0, 0xFFFF); // print "Hello World!"
+    
     while(1) {
-        LCD_dispChar(0x48, 60, 60, 0, 0xFFFF); // print hello world, increment counter, move bar, etc
+        if (_CP0_GET_COUNT() > 4800000) { // 24Mhz / 4800000 = 5 Hz
+            _CP0_SET_COUNT(0);
+            sprintf(num, "%d   ", (j-50));
+            LCD_dispString(num, 90, 40, MAGENTA, WHITE);
+            LCD_drawBar_x(0, 65, WHITE, 128, 16);
+            if (j<51) {
+                LCD_drawBar_x((14+j), 65, BLUE, (50-j), 16);
+            } else {
+                LCD_drawBar_x(64, 65, RED, (j-50), 16);
+            }
+            j += 1;
+            if (j == 101) {
+                j = 0;
+            }
+        }    
     }
 }
 
