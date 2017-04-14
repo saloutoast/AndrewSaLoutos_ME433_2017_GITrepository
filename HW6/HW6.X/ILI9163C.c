@@ -199,7 +199,7 @@ void LCD_dispChar(unsigned char c, unsigned short x, unsigned short y, unsigned 
     
     for (i=0; i<5; i=i+1) {
         for (j=0; j<9; j=j+1) {
-            //if (((x+i)<128) & ((y+j)<128)) { // ensure that pixel to be written to exists
+            if (((x+i)<128) & ((y+j)<128)) { // ensure that pixel to be written to exists
                 pix = ASCII[row][i];
                 pix = (pix >> j) & 1;
                 if (pix == 1) {
@@ -207,7 +207,7 @@ void LCD_dispChar(unsigned char c, unsigned short x, unsigned short y, unsigned 
                 } else {
                     LCD_drawPixel( x+i, y+j, color2); // set '0' pixels from ASCII table to color2 (background)
                 }
-            //} 
+            } 
         }
     }
 }
