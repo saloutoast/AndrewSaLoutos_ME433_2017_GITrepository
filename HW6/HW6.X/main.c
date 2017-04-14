@@ -74,18 +74,18 @@ int main() {
     
     int j = 0;
     
-    LCD_dispString(msg, 25, 40, 0, 0xFFFF); // print "Hello World!"
+    LCD_dispString(msg, 28, 32, 0, 0xFFFF); // print "Hello World!"
     
     while(1) {
         if (_CP0_GET_COUNT() > 4800000) { // 24Mhz / 4800000 = 5 Hz
             _CP0_SET_COUNT(0);
             sprintf(num, "%d   ", (j-50));
-            LCD_dispString(num, 90, 40, MAGENTA, WHITE);
-            LCD_drawBar_x(0, 65, WHITE, 128, 16);
+            LCD_dispString(num, 90, 32, MAGENTA, WHITE);
+            LCD_drawBar_x(14, 60, WHITE, 101, 16);
             if (j<51) {
-                LCD_drawBar_x((14+j), 65, BLUE, (50-j), 16);
+                LCD_drawBar_x((14+j), 60, BLUE, (50-j), 16);
             } else {
-                LCD_drawBar_x(64, 65, RED, (j-50), 16);
+                LCD_drawBar_x(64, 60, RED, (j-50), 16);
             }
             j += 1;
             if (j == 101) {
