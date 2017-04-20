@@ -106,7 +106,7 @@ int main() {
                 LCD_drawBar_x(64,64,CYAN,combined_data[4]/500,5); // draw bar for x component, normalize data to be about 25 pixels at 1 g
             } else {
                 LCD_drawBar_x(0,64,WHITE,128,5);
-                LCD_drawBar_x( (64+(combined_data[4]/600)) , 64, BLUE, (-1)*(combined_data[4]/500), 5);
+                LCD_drawBar_x( (64+(combined_data[4]/500)) , 64, BLUE, (-1)*(combined_data[4]/500), 5);
             }
             if (combined_data[5] > 0) {
                 LCD_drawBar_y(62,0,WHITE,128,5);
