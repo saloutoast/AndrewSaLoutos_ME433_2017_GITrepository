@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "ILI9163C.h"
 #include "i2c.h"
+#include "IMU.h"
 
 // DEVCFG0
 #pragma config DEBUG = OFF // no debugging
@@ -86,6 +87,42 @@ int main() {
     
     LCD_dispChar(r, 60, 60, BLACK, WHITE);   
     */
+    
+    unsigned char IMU_data[14]; // arrays to store IMU information before and after shifting
+    signed short combined_data[7]; // [temp, x_g, y_g, z_g, x_xl, y_xl, z_xl]
+    
+    unsigned char msg[100];
+    
+    while(1) {
+        if(_CP0_GET_COUNT() > 4800000) { // 24 MHz / 4800000 = 5 Hz
+            _CP0_SET_COUNT(0);
+            IMU_read_multiple( 0x20, IMU_data, 14);
+            int i;
+            for (i=0; i<7; i+=1) {
+                combined_data[i] = ((IMU_data[(2*i)+1] << 8) | IMU_data[(2*i)]);
+            }
+            if (combined_data[4] > 0) {
+                LCD_drawBar_x(0,64,WHITE,128,5);
+                LCD_drawBar_x(64,64,CYAN,combined_data[4]/500,5); // draw bar for x component, normalize data to be about 25 pixels at 1 g
+            } else {
+                LCD_drawBar_x(0,64,WHITE,128,5);
+                LCD_drawBar_x( (64+(combined_data[4]/600)) , 64, BLUE, (-1)*(combined_data[4]/500), 5);
+            }
+            if (combined_data[5] > 0) {
+                LCD_drawBar_y(62,0,WHITE,128,5);
+                LCD_drawBar_y(62,67,MAGENTA,combined_data[5]/500,5); // draw bar for y component, normalize data to be about 25 pixels at 1 g
+            } else {
+                LCD_drawBar_y(62,0,WHITE,128,5);
+                LCD_drawBar_y(62, (67+(combined_data[5]/500)) , RED, (-1)*(combined_data[5]/500), 5);
+            }
+            sprintf(msg, "x: %d      ", combined_data[4]);
+            LCD_dispString(msg, 10, 10, 0, 0xFFFF);
+            sprintf(msg, "y: %d      ", combined_data[5]);
+            LCD_dispString(msg, 75, 10, 0, 0xFFFF);
+                      
+        }
+    }
+    
 }
 
 

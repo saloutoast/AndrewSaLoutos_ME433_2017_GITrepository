@@ -232,3 +232,13 @@ void LCD_drawBar_x(unsigned short x, unsigned short y, unsigned short color, uns
         }
     }
 }
+
+void LCD_drawBar_y(unsigned short x, unsigned short y, unsigned short color, unsigned short len, unsigned short wid) { // draw a bar of 'color', 'len' by 'wid' starting at x,y
+    int i;
+    int j;
+    for (i=0; i<=len; i+=1) {
+        for (j=0; j<=wid; j+=1) {
+            LCD_drawPixel((x+j), (y+i), color);
+        }
+    }
+}

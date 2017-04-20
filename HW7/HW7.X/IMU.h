@@ -13,7 +13,7 @@
 
 void IMU_init(void); // set up IMU sensor
 
-void read_multiple(unsigned char address, unsigned char reg, unsigned char * data, int length); // read multiple consecutive registers
+void IMU_read_multiple(unsigned char reg, unsigned char * data, int length); // read multiple consecutive registers
 
 #endif	/* IMU_H */
 

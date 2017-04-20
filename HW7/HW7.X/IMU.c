@@ -34,18 +34,18 @@ void IMU_init(void) { // initialize IMU registers
     I2C2_master_stop();   
 }
 
-void read_multiple(unsigned char address, unsigned char reg, unsigned char * data, int length) { // read multiple consecutive registers
+void IMU_read_multiple(unsigned char reg, unsigned char * data, int length) { // read multiple consecutive registers
     
-    int ii = 0;
+    int ii;
     
     I2C2_master_start();
     I2C2_master_send(SLAVE_ADDR); // write to send register
-    I2C2_master_send(address); // send first register address to read from
+    I2C2_master_send(reg); // send first register address to read from
     I2C2_master_restart(); // restart to switch to read mode
     I2C2_master_send(SLAVE_ADDR | 1); // address with read bit
-    for (ii; ii<length; ii++) { // read until array is filled
+    for (ii=0; ii<length; ii+=1) { // read until array is filled
         data[ii] = I2C2_master_recv();
-        if (ii<length) {
+        if (ii<(length-1)) {
             I2C2_master_ack(0);
         } else {
             I2C2_master_ack(1);
