@@ -39,8 +39,10 @@ void read_multiple(unsigned char address, unsigned char reg, unsigned char * dat
     int ii = 0;
     
     I2C2_master_start();
-    I2C2_master_send(SLAVE_ADDR | 1);
-    I2C2_master_send(address); // send first address to read from
+    I2C2_master_send(SLAVE_ADDR); // write to send register
+    I2C2_master_send(address); // send first register address to read from
+    I2C2_master_restart(); // restart to switch to read mode
+    I2C2_master_send(SLAVE_ADDR | 1); // address with read bit
     for (ii; ii<length; ii++) { // read until array is filled
         data[ii] = I2C2_master_recv();
         if (ii<length) {

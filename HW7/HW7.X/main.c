@@ -71,19 +71,21 @@ int main() {
     
     LCD_clearScreen(0xFFFF);
     
-    char who_me;
+    // WHO_AM_I test
+    /*
+    LCD_dispChar(0b01101001, 30, 30, BLACK, WHITE);
     
     I2C2_master_start();
+    I2C2_master_send(0b11010110);
+    I2C2_master_send(0b00001111);
+    I2C2_master_restart();
     I2C2_master_send(0b11010111);
-    I2C2_master_send(0x0F);
-    who_me = I2C2_master_recv();
-    I2C2_master_ack(0);
+    char r = I2C2_master_recv();
+    I2C2_master_ack(1);
     I2C2_master_stop();
     
-    if (who_me == 0b01101001) {
-        LCD_dispChar(0x68, 60, 60, BLACK, WHITE);
-    }
-    
+    LCD_dispChar(r, 60, 60, BLACK, WHITE);   
+    */
 }
 
 
