@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <configuration version="1.0.10.0">
-  <DisplayManager>
-    <SystemInitScript/>
-    <SystemStartScript/>
-  </DisplayManager>
   <General>
     <HarmonyPath path="../.."/>
     <Processor name=""/>
@@ -158,11 +154,11 @@
     </Templates>
     <CompilerItems>
       <C32>
-        <Include value="C:\microchip\harmony\v1_10\apps\test2\firmware\src"/>
-        <Include value="C:\microchip\harmony\v1_10\apps\test2\firmware\src\system_config\default"/>
-        <Include value="C:\microchip\harmony\v1_10\apps\test2\firmware\src\default"/>
+        <Include value="C:\microchip\harmony\v1_10\apps\HW7_harmony\firmware\src"/>
+        <Include value="C:\microchip\harmony\v1_10\apps\HW7_harmony\firmware\src\system_config\default"/>
+        <Include value="C:\microchip\harmony\v1_10\apps\HW7_harmony\firmware\src\default"/>
         <Include value="C:\microchip\harmony\v1_10\framework"/>
-        <Include value="C:\microchip\harmony\v1_10\apps\test2\firmware\src\system_config\default\framework"/>
+        <Include value="C:\microchip\harmony\v1_10\apps\HW7_harmony\firmware\src\system_config\default\framework"/>
       </C32>
     </CompilerItems>
     <Libraries>

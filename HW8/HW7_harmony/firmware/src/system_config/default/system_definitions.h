@@ -1,29 +1,20 @@
 /*******************************************************************************
-  MPLAB Harmony System Configuration Header
+  System Definitions
 
   File Name:
-    system_config.h
+    system_definitions.h
 
   Summary:
-    Build-time configuration header for the system defined by this MPLAB Harmony
-    project.
+    MPLAB Harmony project system definitions.
 
   Description:
-    An MPLAB Project may have multiple configurations.  This file defines the
-    build-time options for a single configuration.
+    This file contains the system-wide prototypes and definitions for an MPLAB
+    Harmony project.
+ *******************************************************************************/
 
-  Remarks:
-    This configuration header must not define any prototypes or data
-    definitions (or include any files that do).  It only provides macro
-    definitions for build-time configuration options that are not instantiated
-    until used by another MPLAB Harmony module or application.
-
-    Created with MPLAB Harmony Version 1.10
-*******************************************************************************/
-
-// DOM-IGNORE-BEGIN
+//DOM-IGNORE-BEGIN
 /*******************************************************************************
-Copyright (c) 2013-2015 released Microchip Technology Inc.  All rights reserved.
+Copyright (c) 2013-2014 released Microchip Technology Inc.  All rights reserved.
 
 Microchip licenses to you the right to use, modify, copy and distribute
 Software only when embedded on a Microchip microcontroller or digital signal
@@ -43,20 +34,33 @@ INCLUDING BUT NOT LIMITED TO ANY INCIDENTAL, SPECIAL, INDIRECT, PUNITIVE OR
 CONSEQUENTIAL DAMAGES, LOST PROFITS OR LOST DATA, COST OF PROCUREMENT OF
 SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 (INCLUDING BUT NOT LIMITED TO ANY DEFENSE THEREOF), OR OTHER SIMILAR COSTS.
-*******************************************************************************/
-// DOM-IGNORE-END
+ *******************************************************************************/
+//DOM-IGNORE-END
 
-#ifndef _SYSTEM_CONFIG_H
-#define _SYSTEM_CONFIG_H
+#ifndef _SYS_DEFINITIONS_H
+#define _SYS_DEFINITIONS_H
+
 
 // *****************************************************************************
 // *****************************************************************************
 // Section: Included Files
 // *****************************************************************************
 // *****************************************************************************
-/*  This section Includes other configuration headers necessary to completely
-    define this configuration.
-*/
+
+#include <stdint.h>
+#include <stddef.h>
+#include <stdbool.h>
+#include "system/common/sys_common.h"
+#include "system/common/sys_module.h"
+#include "system/clk/sys_clk.h"
+#include "system/clk/sys_clk_static.h"
+#include "system/devcon/sys_devcon.h"
+#include "system/ports/sys_ports.h"
+
+
+
+#include "app.h"
+
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
@@ -64,53 +68,44 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 extern "C" {
 
 #endif
-// DOM-IGNORE-END
+// DOM-IGNORE-END 
 
 // *****************************************************************************
 // *****************************************************************************
-// Section: System Service Configuration
+// Section: Type Definitions
 // *****************************************************************************
 // *****************************************************************************
+
 // *****************************************************************************
-/* Common System Service Configuration Options
+/* System Objects
+
+  Summary:
+    Structure holding the system's object handles
+
+  Description:
+    This structure contains the object handles for all objects in the
+    MPLAB Harmony project's system configuration.
+
+  Remarks:
+    These handles are returned from the "Initialize" functions for each module
+    and must be passed into the "Tasks" function for each module.
 */
-#define SYS_VERSION_STR           "1.10"
-#define SYS_VERSION               11000
 
-// *****************************************************************************
-/* Clock System Service Configuration Options
-*/
-#define SYS_CLK_FREQ                        48000000ul
-#define SYS_CLK_BUS_PERIPHERAL_1            48000000ul
-#define SYS_CLK_UPLL_BEFORE_DIV2_FREQ       96000000ul
-#define SYS_CLK_CONFIG_PRIMARY_XTAL         8000000ul
-#define SYS_CLK_CONFIG_SECONDARY_XTAL       0ul
-   
-/*** Ports System Service Configuration ***/
+typedef struct
+{
+    SYS_MODULE_OBJ  sysDevcon;
+
+} SYSTEM_OBJECTS;
 
 
 // *****************************************************************************
 // *****************************************************************************
-// Section: Driver Configuration
+// Section: extern declarations
 // *****************************************************************************
 // *****************************************************************************
 
-// *****************************************************************************
-// *****************************************************************************
-// Section: Middleware & Other Library Configuration
-// *****************************************************************************
-// *****************************************************************************
+extern SYSTEM_OBJECTS sysObj;
 
-
-
-
-// *****************************************************************************
-// *****************************************************************************
-// Section: Application Configuration
-// *****************************************************************************
-// *****************************************************************************
-
-/*** Application Instance 0 Configuration ***/
 
 //DOM-IGNORE-BEGIN
 #ifdef __cplusplus
@@ -118,8 +113,7 @@ extern "C" {
 #endif
 //DOM-IGNORE-END
 
-
-#endif // _SYSTEM_CONFIG_H
+#endif /* _SYS_DEFINITIONS_H */
 /*******************************************************************************
  End of File
 */

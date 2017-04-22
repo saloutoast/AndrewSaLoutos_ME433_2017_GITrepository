@@ -54,6 +54,10 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // *****************************************************************************
 
 #include "app.h"
+#include <stdio.h>
+#include "i2c.h"
+#include "ILI9163C.h"
+#include "IMU.h"
 
 // *****************************************************************************
 // *****************************************************************************
@@ -77,6 +81,11 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 */
 
 APP_DATA appData;
+
+unsigned char IMU_data[14]; // arrays to store IMU information before and after shifting
+signed short combined_data[7]; // [temp, x_g, y_g, z_g, x_xl, y_xl, z_xl]
+    
+unsigned char msg[100];
 
 // *****************************************************************************
 // *****************************************************************************
@@ -117,12 +126,21 @@ void APP_Initialize ( void )
     /* Place the App state machine in its initial state. */
     appData.state = APP_STATE_INIT;
 
-    TRISAbits.TRISA4 = 0; // pin RA4 is an output pin (LED)
-    LATAbits.LATA4 = 1; // default output on RA4 is high (LED is on)
-    TRISBbits.TRISB4 = 1; // pin RB4 is an input pin (push button)
+    
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
+    TRISAbits.TRISA4 = 0; // pin RA4 is an output pin (LED)
+    LATAbits.LATA4 = 1; // default output on RA4 is high (LED is on)
+    TRISBbits.TRISB4 = 1; // pin RB4 is an input pin (push button)
+    
+    SPI1_init(); // initialize SPI peripheral
+    
+    LCD_init(); // initialize the LCD screen
+    
+    IMU_init(); // initialize the IMU sensor
+    
+    LCD_clearScreen(0xFFFF);
 }
 
 
@@ -156,17 +174,33 @@ void APP_Tasks ( void )
 
         case APP_STATE_SERVICE_TASKS:
         {
-            if ( _CP0_GET_COUNT() > 12000 ) {
+            if(_CP0_GET_COUNT() > 4800000) { // 24 MHz / 4800000 = 5 Hz
                 _CP0_SET_COUNT(0);
-                LATAINV = 0x10; // invert value of RA4 (toggle LED)
-            }
-            if ( !PORTBbits.RB4 ) { // read RB4 (0 if push button is pressed)
-                LATAbits.LATA4 = 0; // set RA4 to 0 (turn off LED)
-                while ( !PORTBbits.RB4 ) {
-                    ; // wait while button is pressed
+                IMU_read_multiple( 0x20, IMU_data, 14);
+                int i;
+                for (i=0; i<7; i+=1) {
+                    combined_data[i] = ((IMU_data[(2*i)+1] << 8) | IMU_data[(2*i)]);
                 }
+                if (combined_data[4] > 0) {
+                    LCD_drawBar_x(0,64,WHITE,128,5);
+                    LCD_drawBar_x(64,64,CYAN,combined_data[4]/500,5); // draw bar for x component, normalize data to be about 25 pixels at 1 g
+                } else {
+                    LCD_drawBar_x(0,64,WHITE,128,5);
+                    LCD_drawBar_x( (64+(combined_data[4]/500)) , 64, BLUE, (-1)*(combined_data[4]/500), 5);
+                }
+                if (combined_data[5] > 0) {
+                    LCD_drawBar_y(62,0,WHITE,128,5);
+                    LCD_drawBar_y(62,67,MAGENTA,combined_data[5]/500,5); // draw bar for y component, normalize data to be about 25 pixels at 1 g
+                } else {
+                    LCD_drawBar_y(62,0,WHITE,128,5);
+                    LCD_drawBar_y(62, (67+(combined_data[5]/500)) , RED, (-1)*(combined_data[5]/500), 5);
+                }
+                sprintf(msg, "x: %d      ", combined_data[4]);
+                LCD_dispString(msg, 10, 10, 0, 0xFFFF);
+                sprintf(msg, "y: %d      ", combined_data[5]);
+                LCD_dispString(msg, 75, 10, 0, 0xFFFF);
+
             }
-            
             break;
         }
 
