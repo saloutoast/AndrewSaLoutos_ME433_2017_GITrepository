@@ -68,29 +68,29 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
 /*** DEVCFG1 ***/
 
-#pragma config FNOSC =      PRIPLL
+#pragma config FNOSC =      FRCPLL
 #pragma config FSOSCEN =    OFF
 #pragma config IESO =       OFF
-#pragma config POSCMOD =    HS
+#pragma config POSCMOD =    OFF
 #pragma config OSCIOFNC =   OFF
 #pragma config FPBDIV =     DIV_1
 #pragma config FCKSM =      CSDCMD
 #pragma config WDTPS =      PS1048576
 #pragma config FWDTEN =     OFF
 #pragma config WINDIS =     OFF
-#pragma config FWDTWINSZ =  WINSZ_25
+#pragma config FWDTWINSZ =  WINSZ_50
 /*** DEVCFG2 ***/
 
 #pragma config FPLLIDIV =   DIV_2
 #pragma config FPLLMUL =    MUL_24
 #pragma config FPLLODIV =   DIV_2
-#pragma config UPLLIDIV =   DIV_2
-#pragma config UPLLEN =     ON
+#pragma config UPLLIDIV =   DIV_3
+#pragma config UPLLEN =     OFF
 /*** DEVCFG3 ***/
 
 #pragma config USERID =     0xffff
-#pragma config PMDL1WAY =   OFF
-#pragma config IOL1WAY =    OFF
+#pragma config PMDL1WAY =   ON
+#pragma config IOL1WAY =    ON
 #pragma config FUSBIDIO =   ON
 #pragma config FVBUSONIO =  ON
 // </editor-fold>

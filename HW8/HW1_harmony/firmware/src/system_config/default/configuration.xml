@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <configuration version="1.0.10.0">
-  <DisplayManager>
-    <SystemInitScript/>
-    <SystemStartScript/>
-  </DisplayManager>
   <General>
     <HarmonyPath path="../../../../../../../../../microchip/harmony/v1_10"/>
     <Processor name=""/>
@@ -101,12 +97,12 @@
       <Template>
         <Name>sys_ports_static.c</Name>
         <Path>Source Files/app/system_config/default/framework/system/ports/src</Path>
-        <Checksum>A170AB2047940A1FB53D56347F093E7E</Checksum>
+        <Checksum>1724453ED96A161750C2576A9FCCB54D</Checksum>
       </Template>
       <Template>
         <Name>system_init.c</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>E232AAD462520CE547E39B1154E1CF19</Checksum>
+        <Checksum>C192D17B74FD6B64D8D16670F01B0531</Checksum>
       </Template>
       <Template>
         <Name>main.c</Name>
@@ -120,7 +116,7 @@
       <Template>
         <Name>system_config.h</Name>
         <Path>Header Files/app/system_config/default</Path>
-        <Checksum>2151B4F40F4EF40A980967378FB3D507</Checksum>
+        <Checksum>F3C4C979B6FCF5BE7EE01F354AF0E80B</Checksum>
       </Template>
       <Template>
         <Name>system_definitions.h</Name>
@@ -158,11 +154,11 @@
     </Templates>
     <CompilerItems>
       <C32>
-        <Include value="C:\Users\Andrew\Documents\Andrew SaLoutos Documents\2016-2017\ME 433\AndrewSaLoutos_ME433_2017_GITrepository\HW8\HW1_harmony\firmware\src"/>
-        <Include value="C:\Users\Andrew\Documents\Andrew SaLoutos Documents\2016-2017\ME 433\AndrewSaLoutos_ME433_2017_GITrepository\HW8\HW1_harmony\firmware\src\system_config\default"/>
-        <Include value="C:\Users\Andrew\Documents\Andrew SaLoutos Documents\2016-2017\ME 433\AndrewSaLoutos_ME433_2017_GITrepository\HW8\HW1_harmony\firmware\src\default"/>
+        <Include value="C:\Users\Andrew\Documents\AndrewSaLoutos_Documents\2016_2017\ME_433\AndrewSaLoutos_ME433_2017_GITrepository\HW8\HW1_harmony\firmware\src"/>
+        <Include value="C:\Users\Andrew\Documents\AndrewSaLoutos_Documents\2016_2017\ME_433\AndrewSaLoutos_ME433_2017_GITrepository\HW8\HW1_harmony\firmware\src\system_config\default"/>
+        <Include value="C:\Users\Andrew\Documents\AndrewSaLoutos_Documents\2016_2017\ME_433\AndrewSaLoutos_ME433_2017_GITrepository\HW8\HW1_harmony\firmware\src\default"/>
         <Include value="C:\microchip\harmony\v1_10\framework"/>
-        <Include value="C:\Users\Andrew\Documents\Andrew SaLoutos Documents\2016-2017\ME 433\AndrewSaLoutos_ME433_2017_GITrepository\HW8\HW1_harmony\firmware\src\system_config\default\framework"/>
+        <Include value="C:\Users\Andrew\Documents\AndrewSaLoutos_Documents\2016_2017\ME_433\AndrewSaLoutos_ME433_2017_GITrepository\HW8\HW1_harmony\firmware\src\system_config\default\framework"/>
       </C32>
     </CompilerItems>
     <Libraries>

@@ -82,27 +82,11 @@ extern "C" {
 */
 #define SYS_CLK_FREQ                        48000000ul
 #define SYS_CLK_BUS_PERIPHERAL_1            48000000ul
-#define SYS_CLK_UPLL_BEFORE_DIV2_FREQ       96000000ul
+#define SYS_CLK_UPLL_BEFORE_DIV2_FREQ       63999984ul
 #define SYS_CLK_CONFIG_PRIMARY_XTAL         8000000ul
 #define SYS_CLK_CONFIG_SECONDARY_XTAL       0ul
    
 /*** Ports System Service Configuration ***/
-
-#define SYS_PORT_A_ANSEL        0xf
-#define SYS_PORT_A_TRIS         0xf
-#define SYS_PORT_A_LAT          0x10
-#define SYS_PORT_A_ODC          0x0
-#define SYS_PORT_A_CNPU         0x0
-#define SYS_PORT_A_CNPD         0x0
-#define SYS_PORT_A_CNEN         0x0
-
-#define SYS_PORT_B_ANSEL        0xec0f
-#define SYS_PORT_B_TRIS         0xefbf
-#define SYS_PORT_B_LAT          0x0
-#define SYS_PORT_B_ODC          0x0
-#define SYS_PORT_B_CNPU         0x0
-#define SYS_PORT_B_CNPD         0x0
-#define SYS_PORT_B_CNEN         0x0
 
 
 // *****************************************************************************
