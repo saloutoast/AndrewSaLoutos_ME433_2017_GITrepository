@@ -343,7 +343,9 @@ void APP_Initialize(void) {
     appData.readBuffer = &readBuffer[0];
     
     // Start the IMU unit
+       
     IMU_init(); // initialize the IMU sensor
+    
     
     startTime = _CP0_GET_COUNT();
 }
@@ -478,7 +480,7 @@ void APP_Tasks(void) {
                 
                 startTime = _CP0_GET_COUNT();
             } else {
-                /*len = sprintf(dataOut, "");
+                /*len = sprintf(dataOut, 0);
                 USB_DEVICE_CDC_Write(USB_DEVICE_CDC_INDEX_0,
                         &appData.writeTransferHandle, dataOut, len,
                         USB_DEVICE_CDC_TRANSFER_FLAGS_DATA_COMPLETE);*/
