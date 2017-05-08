@@ -323,15 +323,15 @@ void APP_Tasks(void) {
                     combined_data[j] = ((IMU_data[(2*j)+1] << 8) | IMU_data[(2*j)]);
                 }
                 
-                if (combined_data[1] == 0) {
-                    move_x = 1; //combined_data[1]/300;]
-                    move_y = 1; //combined_data[2]/300;
+                
+                move_x = -combined_data[1]/400;
+                move_y = -combined_data[2]/400;
 
-                    appData.mouseButton[0] = MOUSE_BUTTON_STATE_RELEASED;
-                    appData.mouseButton[1] = MOUSE_BUTTON_STATE_RELEASED;
-                    appData.xCoordinate = (int8_t) move_x;
-                    appData.yCoordinate = (int8_t) move_y;
-                }
+                appData.mouseButton[0] = MOUSE_BUTTON_STATE_RELEASED;
+                appData.mouseButton[1] = MOUSE_BUTTON_STATE_RELEASED;
+                appData.xCoordinate = (int8_t) move_x;
+                appData.yCoordinate = (int8_t) move_y;
+                
                 inc = 0;
             } else {
                 appData.mouseButton[0] = MOUSE_BUTTON_STATE_RELEASED;
