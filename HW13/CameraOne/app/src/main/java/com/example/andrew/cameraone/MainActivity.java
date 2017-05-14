@@ -21,6 +21,14 @@ import android.widget.TextView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.Toast;
+
+
 import java.io.IOException;
 
 import static android.graphics.Color.blue;
@@ -37,6 +45,11 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
     private Canvas canvas = new Canvas(bmp);
     private Paint paint1 = new Paint();
     private TextView mTextView;
+
+    private RadioGroup radioGroup;
+    private RadioButton redButton;
+    private RadioButton greenButton;
+    private RadioButton blueButton;
 
     SeekBar myControl;
     TextView myTextView;
@@ -72,6 +85,11 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
             mTextView.setText("no camera permissions");
         }
 
+        radioGroup = (RadioGroup) findViewById(R.id.myRadioGroup);
+        redButton = (RadioButton) findViewById(R.id.redButton);
+        greenButton = (RadioButton) findViewById(R.id.greenButton);
+        blueButton = (RadioButton) findViewById(R.id.blueButton);
+
     }
 
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
@@ -106,6 +124,7 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
         // every time there is a new Camera preview frame
         mTextureView.getBitmap(bmp);
 
+
         final Canvas c = mSurfaceHolder.lockCanvas();
         if (c != null) {
             int thresh = myControl.getProgress(); // comparison value from progress of slider
@@ -117,8 +136,20 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
 
                 // in the row, see if there is more green than red
                 for (int i = 0; i < bmp.getWidth(); i++) {
-                    if (((green(pixels[i]) - red(pixels[i])) > thresh) && ((green(pixels[i]) - blue(pixels[i])) > thresh)) {
-                        pixels[i] = rgb(0, 255, 0); // over write the pixel with pure green
+                    if (redButton.isChecked()) { // if red button is checked, identify red
+                        if (((red(pixels[i]) - green(pixels[i])) > thresh) && ((red(pixels[i]) - blue(pixels[i])) > thresh)) {
+                            pixels[i] = rgb(255, 0, 0); // over write the pixel with pure red
+                        }
+                    }
+                    if (greenButton.isChecked()) { // if green button is checked, identify green
+                        if (((green(pixels[i]) - red(pixels[i])) > thresh) && ((green(pixels[i]) - blue(pixels[i])) > thresh)) {
+                            pixels[i] = rgb(0, 255, 0); // over write the pixel with pure green
+                        }
+                    }
+                    if (blueButton.isChecked()) { // if blue button is checked, identify blue
+                        if (((blue(pixels[i]) - red(pixels[i])) > thresh) && ((blue(pixels[i]) - green(pixels[i])) > thresh)) {
+                            pixels[i] = rgb(0, 0, 255); // over write the pixel with pure blue
+                        }
                     }
                 }
 
