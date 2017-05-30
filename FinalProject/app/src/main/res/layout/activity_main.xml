@@ -75,7 +75,7 @@
 
             <TextView
                 android:id="@+id/textView01"
-                android:text="slider 1 value"
+                android:text="motor 1 value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -91,7 +91,7 @@
 
             <TextView
                 android:id="@+id/textView02"
-                android:text="slider 2 value"
+                android:text="motor 2 value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
