@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myTextView3.setText("Motor values: A:"+myControl1.getProgress()", B:"+myControl2.getProgress());
+                myTextView3.setText("Motor values: A:"+((myControl1.getProgress()*2)-100)+", B:"+((myControl2.getProgress()*2)-100));
 
                 String sendString = String.valueOf(((myControl1.getProgress()*2)-100)) + ',' + String.valueOf((myControl2.getProgress()*2)-100) + '\n';
                 try {
