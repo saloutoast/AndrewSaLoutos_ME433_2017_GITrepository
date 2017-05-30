@@ -176,31 +176,60 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
         int thresh = myControl3.getProgress(); // comparison value from progress of slider
         if (c != null) {
 
+            int com_far = 0;
+            int far_pix = 0;
+            int com_near = 0;
+            int near_pix = 0;
             for (int j = 0; j < bmp.getHeight(); j+=5) {// index through every five rows
                 int[] pixels = new int[bmp.getWidth()]; // pixels[] is the RGBA data
                 int startY = j; // which row in the bitmap to analyze to read
                 bmp.getPixels(pixels, 0, bmp.getWidth(), 0, startY, bmp.getWidth(), 1);
 
 
-                int com = 0;
+                int com_local = 0;
                 int num_pix = 0;
                 // in the row, see if there is more green than red and blue
                 for (int i = 0; i < bmp.getWidth(); i++) {
                     if (((green(pixels[i]) - red(pixels[i])) > thresh) && ((green(pixels[i]) - blue(pixels[i])) > thresh)) {
                         pixels[i] = rgb(0, 255, 0); // over write the pixel with pure green
-                        com = com + i; // add to center of mass
+                        com_local = com_local + i; // add to center of mass
                         num_pix = num_pix + 1; // track number of points in com
                     }
                 }
-                if (num_pix > 0) {com = com/num_pix;}// find center of mass of green pieces
-                if (com > 0) {
-                    pixels[com] = rgb(255, 0, 0); // target at center of mass
-                    canvas.drawCircle(com, j, 5, paint1);
+
+                if (j < (bmp.getHeight()/2)) {
+                    com_far = com_far + com_local;
+                    far_pix = far_pix + 1;
+                } else {
+                    com_near = com_near + com_local;
+                    near_pix = near_pix + 1;
                 }
+
+
+
+
+                //if (num_pix > 0) {com_local = com_local/num_pix;}// find center of mass of green pieces
+                //if (com_local > 0) {
+                //    pixels[com_local] = rgb(255, 0, 0); // target at center of mass
+                //    canvas.drawCircle(com_local, j, 5, paint1);
+                //}
 
                 // update the row
                 bmp.setPixels(pixels, 0, bmp.getWidth(), 0, startY, bmp.getWidth(), 1);
             }
+
+            com_far = com_far / far_pix; // determine 2 CoMs
+            com_near = com_near / near_pix;
+            canvas.drawCircle(com_far, far_pix/2, 6, paint1);
+            canvas.drawCircle(com_near, (far_pix+(near_pix/2)), 6, paint1);
+
+            // Send motor control based on two com values
+            // if com_far > com_near by an amount... turn left
+            // if com_far < com_near by an amound... turn right
+            // within bound, keep going straight
+
+
+
         }
 
         // draw a circle at some position

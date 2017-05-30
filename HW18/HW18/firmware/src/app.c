@@ -433,6 +433,28 @@ void APP_Tasks(void) {
                         rx[rxPos] = 0; // end the array
                         sscanf(rx, "%d, %d", &spdA, &spdB); // get the motor speeds out of the array
                         gotRx = 1; // set the flag
+                        
+                        // Set the new motor speeds
+                        if (spdA > 100) { spdA = 100; } // make sure speed magnitude is not above 100
+                        if (spdA < -100) { spdA = -100; }
+                        if (spdB > 100) { spdB = 100; }
+                        if (spdB < -100) { spdB = -100; }
+                        // implement the new speeds with OC1RS and OC2RS                                
+                        if (spdA > 0) { // forward direction
+                            OC1RS = (spdA * (PR2 + 1)) / 100;
+                            LATBbits.LATB13 = 1; 
+                        } else { // backwards direction
+                            OC1RS = (-spdA * (PR2 + 1)) / 100;
+                            LATBbits.LATB13 = 0;
+                        }
+                        if (spdB > 0) { // forward direction
+                            OC2RS = (spdB * (PR2 + 1)) / 100;
+                            LATBbits.LATB15 = 1;
+                        } else { // backward direction
+                            OC2RS = (-spdB * (PR2 + 1)) / 100;
+                            LATBbits.LATB15 = 0;
+                        }
+
                         break; // get out of the while loop
                     } else if (appData.readBuffer[ii] == 0) {
                         break; // there was no newline, get out of the while loop
@@ -443,26 +465,7 @@ void APP_Tasks(void) {
                         ii++;
                     }
                 }
-                // make sure speed magnitude is not above 100
-                if (spdA > 100) { spdA = 100; } 
-                if (spdA < -100) { spdA = -100; }
-                if (spdB > 100) { spdB = 100; }
-                if (spdB < -100) { spdB = -100; }
-                // implement the new speeds with OC1RS and OC2RS                                
-                if (spdA > 0) { // forward direction
-                    OC1RS = (spdA * (PR2 + 1)) / 100;
-                    LATBbits.LATB13 = 1; 
-                } else { // backwards direction
-                    OC1RS = (-spdA * (PR2 + 1)) / 100;
-                    LATBbits.LATB13 = 0;
-                }
-                if (spdB > 0) { // forward direction
-                    OC2RS = (spdB * (PR2 + 1)) / 100;
-                    LATBbits.LATB15 = 1;
-                } else { // backward direction
-                    OC2RS = (-spdB * (PR2 + 1)) / 100;
-                    LATBbits.LATB15 = 0;
-                }
+                
 
                 if (appData.readTransferHandle == USB_DEVICE_CDC_TRANSFER_HANDLE_INVALID) {
                     appData.state = APP_STATE_ERROR;
