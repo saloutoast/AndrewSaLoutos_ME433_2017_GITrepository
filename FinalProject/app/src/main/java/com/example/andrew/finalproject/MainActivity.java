@@ -64,10 +64,12 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
 
     Button button;
     TextView myTextView3;
-    ScrollView myScrollView;
+    //ScrollView myScrollView;
     TextView myTextView4;
 
     SeekBar myControl3;
+
+    TextView FPStext;
 
     private UsbManager manager;
     private UsbSerialPort sPort;
@@ -94,10 +96,11 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
 
         myTextView3 = (TextView) findViewById(R.id.textView03);
         //myScrollView = (ScrollView) findViewById(R.id.ScrollView01);
-        //myTextView4 = (TextView) findViewById(R.id.textView04);
+        myTextView4 = (TextView) findViewById(R.id.textView04);
         button = (Button) findViewById(R.id.button1);
 
         myControl3 = (SeekBar) findViewById(R.id.seekSensitivity);
+        FPStext = (TextView) findViewById(R.id.framespersec);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
         int thresh = myControl3.getProgress(); // comparison value from progress of slider
         if (c != null) {
 
-            for (int j = 0; j < bmp.getHeight(); j+=8) {// index through every five rows
+            for (int j = 0; j < bmp.getHeight(); j+=5) {// index through every five rows
                 int[] pixels = new int[bmp.getWidth()]; // pixels[] is the RGBA data
                 int startY = j; // which row in the bitmap to analyze to read
                 bmp.getPixels(pixels, 0, bmp.getWidth(), 0, startY, bmp.getWidth(), 1);
@@ -185,14 +188,15 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
                 for (int i = 0; i < bmp.getWidth(); i++) {
                     if (((green(pixels[i]) - red(pixels[i])) > thresh) && ((green(pixels[i]) - blue(pixels[i])) > thresh)) {
                         pixels[i] = rgb(0, 255, 0); // over write the pixel with pure green
-                        com = com + (i-(bmp.getWidth()/2)); // add to center of mass
+                        com = com + i; // add to center of mass
                         num_pix = num_pix + 1; // track number of points in com
                     }
                 }
-
-                com = com/num_pix; // find center of mass of green pieces
-                pixels[com] = rgb(255, 0, 0); // target at center of mass
-                canvas.drawCircle(com, j, 5, paint1);
+                if (num_pix > 0) {com = com/num_pix;}// find center of mass of green pieces
+                if (com > 0) {
+                    pixels[com] = rgb(255, 0, 0); // target at center of mass
+                    canvas.drawCircle(com, j, 5, paint1);
+                }
 
                 // update the row
                 bmp.setPixels(pixels, 0, bmp.getWidth(), 0, startY, bmp.getWidth(), 1);
@@ -209,10 +213,10 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
         mSurfaceHolder.unlockCanvasAndPost(c);
 
         // calculate the FPS to see how fast the code is running
-        //long nowtime = System.currentTimeMillis();
-        //long diff = nowtime - prevtime;
-        //myTextView.setText("FPS " + 1000 / diff);
-        //prevtime = nowtime;
+        long nowtime = System.currentTimeMillis();
+        long diff = nowtime - prevtime;
+        FPStext.setText("FPS " + 1000 / diff);
+        prevtime = nowtime;
     }
 
     private void setMyControl1Listener() {
@@ -364,8 +368,9 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
         String motorVals = null;
         try {
             motorVals = new String(data, "UTF-8"); // put the data you got into a string
-            myTextView4.append(motorVals);
-            myScrollView.fullScroll(View.FOCUS_DOWN);
+            if (motorVals.length() > 1 ) {
+                myTextView4.setText(motorVals);
+            }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

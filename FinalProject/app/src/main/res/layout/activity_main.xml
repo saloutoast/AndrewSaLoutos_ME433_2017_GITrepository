@@ -19,6 +19,28 @@
             android:orientation="vertical"
             android:visibility="visible">
 
+            <TextView
+                android:id="@+id/top_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Camera view"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <SurfaceView
+                android:id="@+id/surfaceview"
+                android:layout_width="640px"
+                android:layout_height="480px"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/framespersec"/>
+
             <SeekBar
                 android:id="@+id/seekSensitivity"
                 android:layout_width="fill_parent"
@@ -30,20 +52,11 @@
                 android:paddingBottom="10dp"
                 />
 
-            <SurfaceView
-                android:id="@+id/surfaceview"
-                android:layout_width="640px"
-                android:layout_height="480px" />
-
-            <TextureView
-                android:id="@+id/textureview"
-                android:layout_width="640px"
-                android:layout_height="480px" />
-
             <TextView
-                android:id="@+id/top_textView"
+                android:id="@+id/mid_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:text="Send motor values to the PIC"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -94,6 +107,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 />
+
+            <TextView
+                android:id="@+id/textView04"
+                android:text="nothing from usb yet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/holo_green_light"
+                />
+
+            <TextureView
+                android:id="@+id/textureview"
+                android:layout_width="640px"
+                android:layout_height="480px"
+                android:layout_gravity="center"/>
+
+
 
         </LinearLayout>
     </ScrollView>
