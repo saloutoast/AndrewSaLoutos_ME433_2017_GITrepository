@@ -340,11 +340,11 @@ void APP_Initialize(void) {
     /* Set up timers and OC pins for motor control */
     
     // Digital output for the motor directions using pins RB14 and RB15
-	TRISBbits.TRISB14 = 0; 
+	TRISBbits.TRISB13 = 0; 
     TRISBbits.TRISB15 = 0;
     // Initialize B7 and B8 to be OC pins
-    RPB7Rbits.RPB7R = 0101; // OC1
-    RPB8Rbits.RPB8R = 0101; // OC2
+    RPB7Rbits.RPB7R = 0b0101; // OC1
+    RPB8Rbits.RPB8R = 0b0101; // OC2
 
 	// Timer 2 at 20 kHz for the PWM
 	T2CONbits.TCKPS = 0;     // Prescaler of 1
@@ -450,17 +450,17 @@ void APP_Tasks(void) {
                 if (spdB < -100) { spdB = -100; }
                 // implement the new speeds with OC1RS and OC2RS                                
                 if (spdA > 0) { // forward direction
-                    OC1RS = (spdA/100) * (PR2 + 1);
-                    LATBbits.LATB14 = 1; 
+                    OC1RS = (spdA * (PR2 + 1)) / 100;
+                    LATBbits.LATB13 = 1; 
                 } else { // backwards direction
-                    OC1RS = (-spdA/100) * (PR2 + 1);
-                    LATBbits.LATB14 = 0;
+                    OC1RS = (-spdA * (PR2 + 1)) / 100;
+                    LATBbits.LATB13 = 0;
                 }
                 if (spdB > 0) { // forward direction
-                    OC2RS = (spdB/100) * (PR2 + 1);
+                    OC2RS = (spdB * (PR2 + 1)) / 100;
                     LATBbits.LATB15 = 1;
                 } else { // backward direction
-                    OC2RS = (-spdB/100) * (PR2 + 1);
+                    OC2RS = (-spdB * (PR2 + 1)) / 100;
                     LATBbits.LATB15 = 0;
                 }
 
@@ -502,7 +502,7 @@ void APP_Tasks(void) {
             appData.state = APP_STATE_WAIT_FOR_WRITE_COMPLETE;
 
             if (gotRx) {
-                len = sprintf(dataOut, "got: %d, %d\r\n", spdA, spdB);
+                len = sprintf(dataOut, "got: %d, %d, %d, %d\r\n", spdA, spdB, OC1R, OC2R);
                 USB_DEVICE_CDC_Write(USB_DEVICE_CDC_INDEX_0,
                         &appData.writeTransferHandle,
                         dataOut, len,
