@@ -51,21 +51,24 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         myControl1 = (SeekBar) findViewById(R.id.seek1);
-
         myTextView = (TextView) findViewById(R.id.textView01);
-        myTextView.setText("Enter whatever you Like!");
+        myTextView.setText("Motor A value");
 
-        myTextView3 = (TextView) findViewById(R.id.textView02);
+        myControl2 = (SeekBar) findViewById(R.id.seek2);
+        myTextView2 = (TextView) findViewById(R.id.textView02);
+        myTextView2.setText("Motor B value");
+
+        myTextView3 = (TextView) findViewById(R.id.textView03);
         myScrollView = (ScrollView) findViewById(R.id.ScrollView01);
-        myTextView4 = (TextView) findViewById(R.id.textView03);
+        myTextView4 = (TextView) findViewById(R.id.textView04);
         button = (Button) findViewById(R.id.button1);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myTextView3.setText("value on click is "+myControl1.getProgress());
+                myTextView3.setText("Motor values: A:"+myControl1.getProgress()", B:"+myControl2.getProgress());
 
-                String sendString = String.valueOf(myControl1.getProgress()) + '\n';
+                String sendString = String.valueOf(((myControl1.getProgress()*2)-100)) + ',' + String.valueOf((myControl2.getProgress()*2)-100) + '\n';
                 try {
                     sPort.write(sendString.getBytes(), 10); // 10 is the timeout
                 } catch (IOException e) { }
@@ -74,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         setMyControl1Listener();
+        setMyControl2Listener();
 
         manager = (UsbManager) getSystemService(Context.USB_SERVICE);
     }
@@ -87,7 +91,30 @@ public class MainActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressChanged = progress;
 
-                myTextView.setText("The value is: "+progress);
+                myTextView.setText("The value is: "+((progress*2)-100));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+    }
+
+    private void setMyControl2Listener() {
+        myControl2.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+
+            int progressChanged = 0;
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                progressChanged = progress;
+
+                myTextView2.setText("The value is: "+((progress*2)-100));
             }
 
             @Override
@@ -201,10 +228,10 @@ public class MainActivity extends AppCompatActivity {
         //do something with received data
 
         //for displaying:
-        String rxString = null;
+        String motorVals = null;
         try {
-            rxString = new String(data, "UTF-8"); // put the data you got into a string
-            myTextView4.append(rxString);
+            motorVals = new String(data, "UTF-8"); // put the data you got into a string
+            myTextView4.append(motorVals);
             myScrollView.fullScroll(View.FOCUS_DOWN);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
