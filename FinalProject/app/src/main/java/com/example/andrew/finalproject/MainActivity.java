@@ -102,21 +102,8 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
         myControl3 = (SeekBar) findViewById(R.id.seekSensitivity);
         FPStext = (TextView) findViewById(R.id.framespersec);
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                myTextView3.setText("Motor values: A:"+((myControl1.getProgress()*2)-100)+", B:"+((myControl2.getProgress()*2)-100));
-
-                String sendString = String.valueOf(((myControl1.getProgress()*2)-100)) + ',' + String.valueOf((myControl2.getProgress()*2)-100) + '\n';
-                try {
-                    sPort.write(sendString.getBytes(), 10); // 10 is the timeout
-                } catch (IOException e) { }
-
-            }
-        });
-
-        setMyControl1Listener();
-        setMyControl2Listener();
+        //setMyControl1Listener();
+        //setMyControl2Listener();
 
         // see if the app has permission to use the camera
         //ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CAMERA}, 1); // comment out this one
@@ -205,9 +192,6 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
                     near_pix = near_pix + 1;
                 }
 
-
-
-
                 //if (num_pix > 0) {com_local = com_local/num_pix;}// find center of mass of green pieces
                 //if (com_local > 0) {
                 //    pixels[com_local] = rgb(255, 0, 0); // target at center of mass
@@ -224,12 +208,28 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
             canvas.drawCircle(com_near, (far_pix+(near_pix/2)), 6, paint1);
 
             // Send motor control based on two com values
-            // if com_far > com_near by an amount... turn left
-            // if com_far < com_near by an amound... turn right
-            // within bound, keep going straight
+            int err_bound = 30;
+            int err = com_far - com_near;
+            double gain = 0.5;
+            double correction = err*gain;
 
-
-
+            if (err > err_bound) { // if com_far > com_near by an amount... turn left
+                String sendString = String.valueOf(60+correction) + ',' + String.valueOf(60-correction) + '\n';
+                try {
+                    sPort.write(sendString.getBytes(), 10); // 10 is the timeout
+                } catch (IOException e) { }
+            } else if (err < -err_bound) { // if com_far < com_near by an amound... turn right
+                String sendString = String.valueOf(60-correction) + ',' + String.valueOf(60-+correction) + '\n';
+                try {
+                    sPort.write(sendString.getBytes(), 10); // 10 is the timeout
+                } catch (IOException e) { }
+            } else {// within bounds, keep going straight
+                String sendString = String.valueOf(60) + ',' + String.valueOf(60) + '\n';
+                try {
+                    sPort.write(sendString.getBytes(), 10); // 10 is the timeout
+                } catch (IOException e) {
+                }
+            }
         }
 
         // draw a circle at some position
