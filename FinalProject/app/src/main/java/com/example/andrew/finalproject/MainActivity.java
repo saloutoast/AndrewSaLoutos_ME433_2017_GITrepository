@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
     private Paint paint1 = new Paint();
 
     TextView mTextView;
+    TextView mTextView2;
 
     SeekBar myControl1;
     TextView myTextView;
@@ -85,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); // keeps the screen from turning off
 
         mTextView = (TextView) findViewById(R.id.top_textView);
+        mTextView2 = (TextView) findViewById(R.id.mid_textView);
 
         myControl1 = (SeekBar) findViewById(R.id.seek1);
         myTextView = (TextView) findViewById(R.id.textView01);
@@ -177,35 +179,41 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
                 int num_pix = 0;
                 // in the row, see if there is more green than red and blue
                 for (int i = 0; i < bmp.getWidth(); i++) {
-                    if (((green(pixels[i]) - red(pixels[i])) > thresh) && ((green(pixels[i]) - blue(pixels[i])) > thresh)) {
+                    if (((green(pixels[i]) - red(pixels[i])) > thresh) || ((blue(pixels[i]) - red(pixels[i])) > thresh)) {
                         pixels[i] = rgb(0, 255, 0); // over write the pixel with pure green
                         com_local = com_local + i; // add to center of mass
                         num_pix = num_pix + 1; // track number of points in com
                     }
                 }
 
-                if (j < (bmp.getHeight()/2)) {
+                if (num_pix > 0) {com_local = com_local/num_pix;}// find center of mass of green pieces
+                if (com_local > 0) {
+                    pixels[com_local] = rgb(255, 0, 0); // target at center of mass
+                    //canvas.drawCircle(com_local, j, 5, paint1);
+                }
+
+                if (j < (bmp.getHeight()/2) && com_local!=0) { // update far, near centers of mass
                     com_far = com_far + com_local;
                     far_pix = far_pix + 1;
-                } else {
+                } else if (j>=(bmp.getHeight()/2) && com_local!=0) {
                     com_near = com_near + com_local;
                     near_pix = near_pix + 1;
                 }
-
-                //if (num_pix > 0) {com_local = com_local/num_pix;}// find center of mass of green pieces
-                //if (com_local > 0) {
-                //    pixels[com_local] = rgb(255, 0, 0); // target at center of mass
-                //    canvas.drawCircle(com_local, j, 5, paint1);
-                //}
 
                 // update the row
                 bmp.setPixels(pixels, 0, bmp.getWidth(), 0, startY, bmp.getWidth(), 1);
             }
 
-            com_far = com_far / far_pix; // determine 2 CoMs
-            com_near = com_near / near_pix;
-            canvas.drawCircle(com_far, far_pix/2, 6, paint1);
-            canvas.drawCircle(com_near, (far_pix+(near_pix/2)), 6, paint1);
+            mTextView2.setText(Integer.toString(bmp.getWidth())+" by "+Integer.toString(bmp.getHeight()));
+
+            if (far_pix > 0) {com_far = com_far / far_pix; }// determine 2 CoMs
+            if (near_pix > 0) {com_near = com_near / near_pix; }
+
+            myTextView2.setText("com_far: "+Integer.toString(com_far)+", far_pix: "+Integer.toString(far_pix));
+            myTextView3.setText("com_near: "+Integer.toString(com_near)+", near_pix: "+Integer.toString(near_pix));
+
+            canvas.drawCircle(com_far, bmp.getHeight()/4, 10, paint1);
+            canvas.drawCircle(com_near, 3*(bmp.getHeight()/4), 10, paint1);
 
             // Send motor control based on two com values
             int err_bound = 30;
@@ -213,23 +221,23 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
             double gain = 0.5;
             double correction = err*gain;
 
-            if (err > err_bound) { // if com_far > com_near by an amount... turn left
-                String sendString = String.valueOf(60+correction) + ',' + String.valueOf(60-correction) + '\n';
-                try {
-                    sPort.write(sendString.getBytes(), 10); // 10 is the timeout
-                } catch (IOException e) { }
-            } else if (err < -err_bound) { // if com_far < com_near by an amound... turn right
-                String sendString = String.valueOf(60-correction) + ',' + String.valueOf(60-+correction) + '\n';
-                try {
-                    sPort.write(sendString.getBytes(), 10); // 10 is the timeout
-                } catch (IOException e) { }
-            } else {// within bounds, keep going straight
-                String sendString = String.valueOf(60) + ',' + String.valueOf(60) + '\n';
-                try {
-                    sPort.write(sendString.getBytes(), 10); // 10 is the timeout
-                } catch (IOException e) {
-                }
-            }
+//            if (err > err_bound) { // if com_far > com_near by an amount... turn right
+//                String sendString = String.valueOf(60+correction) + ',' + String.valueOf(60) + '\n';
+//                try {
+//                    sPort.write(sendString.getBytes(), 10); // 10 is the timeout
+//                } catch (IOException e) { }
+//            } else if (err < -err_bound) { // if com_far < com_near by an amound... turn left
+//                String sendString = String.valueOf(60) + ',' + String.valueOf(60+correction) + '\n';
+//                try {
+//                    sPort.write(sendString.getBytes(), 10); // 10 is the timeout
+//                } catch (IOException e) { }
+//            } else {// within bounds, keep going straight
+//                String sendString = String.valueOf(60) + ',' + String.valueOf(60) + '\n';
+//                try {
+//                    sPort.write(sendString.getBytes(), 10); // 10 is the timeout
+//                } catch (IOException e) {
+//                }
+//            }
         }
 
         // draw a circle at some position
