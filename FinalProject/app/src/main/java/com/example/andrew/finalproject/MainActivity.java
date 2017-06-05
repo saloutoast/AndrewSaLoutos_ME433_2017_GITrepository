@@ -45,6 +45,7 @@ import static android.graphics.Color.blue;
 import static android.graphics.Color.green;
 import static android.graphics.Color.red;
 import static android.graphics.Color.rgb;
+import static java.lang.Math.abs;
 
 public class MainActivity extends AppCompatActivity implements TextureView.SurfaceTextureListener{
     private Camera mCamera;
@@ -58,13 +59,13 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
     TextView mTextView;
     TextView mTextView2;
 
-    SeekBar myControl1;
+    //SeekBar myControl1;
     TextView myTextView;
-    SeekBar myControl2;
+    //SeekBar myControl2;
     TextView myTextView2;
 
-    Button button;
-    TextView myTextView3;
+    //Button button;
+    //TextView myTextView3;
     //ScrollView myScrollView;
     TextView myTextView4;
 
@@ -88,18 +89,16 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
         mTextView = (TextView) findViewById(R.id.top_textView);
         mTextView2 = (TextView) findViewById(R.id.mid_textView);
 
-        myControl1 = (SeekBar) findViewById(R.id.seek1);
         myTextView = (TextView) findViewById(R.id.textView01);
         myTextView.setText("Motor A value");
 
-        myControl2 = (SeekBar) findViewById(R.id.seek2);
         myTextView2 = (TextView) findViewById(R.id.textView02);
         myTextView2.setText("Motor B value");
 
-        myTextView3 = (TextView) findViewById(R.id.textView03);
+        //myTextView3 = (TextView) findViewById(R.id.textView03);
         //myScrollView = (ScrollView) findViewById(R.id.ScrollView01);
         myTextView4 = (TextView) findViewById(R.id.textView04);
-        button = (Button) findViewById(R.id.button1);
+        //button = (Button) findViewById(R.id.button1);
 
         myControl3 = (SeekBar) findViewById(R.id.seekSensitivity);
         FPStext = (TextView) findViewById(R.id.framespersec);
@@ -177,9 +176,9 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
 
                 int com_local = 0;
                 int num_pix = 0;
-                // in the row, see if there is more green than red and blue
+                // in the row, see if row is gray //there is more green than red and blue
                 for (int i = 0; i < bmp.getWidth(); i++) {
-                    if (((green(pixels[i]) - red(pixels[i])) > thresh) || ((blue(pixels[i]) - red(pixels[i])) > thresh)) {
+                    if ((abs(green(pixels[i]) - red(pixels[i])) < thresh) && (abs(blue(pixels[i]) - red(pixels[i])) < thresh) && (abs(blue(pixels[i]) - green(pixels[i])) < thresh)) {
                         pixels[i] = rgb(0, 255, 0); // over write the pixel with pure green
                         com_local = com_local + i; // add to center of mass
                         num_pix = num_pix + 1; // track number of points in com
@@ -204,40 +203,40 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
                 bmp.setPixels(pixels, 0, bmp.getWidth(), 0, startY, bmp.getWidth(), 1);
             }
 
-            mTextView2.setText(Integer.toString(bmp.getWidth())+" by "+Integer.toString(bmp.getHeight()));
+            //mTextView2.setText(Integer.toString(bmp.getWidth())+" by "+Integer.toString(bmp.getHeight()));
 
             if (far_pix > 0) {com_far = com_far / far_pix; }// determine 2 CoMs
             if (near_pix > 0) {com_near = com_near / near_pix; }
 
-            myTextView2.setText("com_far: "+Integer.toString(com_far)+", far_pix: "+Integer.toString(far_pix));
-            myTextView3.setText("com_near: "+Integer.toString(com_near)+", near_pix: "+Integer.toString(near_pix));
+            //myTextView2.setText("com_far: "+Integer.toString(com_far)+", far_pix: "+Integer.toString(far_pix));
+            //myTextView3.setText("com_near: "+Integer.toString(com_near)+", near_pix: "+Integer.toString(near_pix));
 
             canvas.drawCircle(com_far, bmp.getHeight()/4, 10, paint1);
             canvas.drawCircle(com_near, 3*(bmp.getHeight()/4), 10, paint1);
 
             // Send motor control based on two com values
-            int err_bound = 30;
+            int err_bound = 10;
             int err = com_far - com_near;
             double gain = 0.5;
-            double correction = err*gain;
+            double correction = abs(err*gain);
 
-//            if (err > err_bound) { // if com_far > com_near by an amount... turn right
-//                String sendString = String.valueOf(60+correction) + ',' + String.valueOf(60) + '\n';
-//                try {
-//                    sPort.write(sendString.getBytes(), 10); // 10 is the timeout
-//                } catch (IOException e) { }
-//            } else if (err < -err_bound) { // if com_far < com_near by an amound... turn left
-//                String sendString = String.valueOf(60) + ',' + String.valueOf(60+correction) + '\n';
-//                try {
-//                    sPort.write(sendString.getBytes(), 10); // 10 is the timeout
-//                } catch (IOException e) { }
-//            } else {// within bounds, keep going straight
-//                String sendString = String.valueOf(60) + ',' + String.valueOf(60) + '\n';
-//                try {
-//                    sPort.write(sendString.getBytes(), 10); // 10 is the timeout
-//                } catch (IOException e) {
-//                }
-//            }
+            if (err > err_bound) { // if com_far > com_near by an amount... turn right
+                String sendString = String.valueOf(40-(correction/2)) + ',' + String.valueOf(40+(correction/2)) + '\n';
+                try {
+                    sPort.write(sendString.getBytes(), 10); // 10 is the timeout
+                } catch (IOException e) { }
+            } else if (err < -err_bound) { // if com_far < com_near by an amount... turn left
+                String sendString = String.valueOf(40+(correction/2)) + ',' + String.valueOf(40-(correction/2)) + '\n';
+                try {
+                    sPort.write(sendString.getBytes(), 10); // 10 is the timeout
+                } catch (IOException e) { }
+            } else {// within bounds, keep going straight
+                String sendString = String.valueOf(40) + ',' + String.valueOf(40) + '\n';
+                try {
+                    sPort.write(sendString.getBytes(), 10); // 10 is the timeout
+                } catch (IOException e) {
+                }
+            }
         }
 
         // draw a circle at some position
@@ -256,51 +255,51 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
         prevtime = nowtime;
     }
 
-    private void setMyControl1Listener() {
-        myControl1.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+//    private void setMyControl1Listener() {
+////        myControl1.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+////
+////            int progressChanged = 0;
+////
+////            @Override
+////            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+////                progressChanged = progress;
+////
+////                myTextView.setText("The value is: "+((progress*2)-100));
+////            }
+////
+////            @Override
+////            public void onStartTrackingTouch(SeekBar seekBar) {
+////            }
+////
+////            @Override
+////            public void onStopTrackingTouch(SeekBar seekBar) {
+////
+////            }
+////        });
+//    }
 
-            int progressChanged = 0;
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                progressChanged = progress;
-
-                myTextView.setText("The value is: "+((progress*2)-100));
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-    }
-
-    private void setMyControl2Listener() {
-        myControl2.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-
-            int progressChanged = 0;
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                progressChanged = progress;
-
-                myTextView2.setText("The value is: "+((progress*2)-100));
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-    }
+//    private void setMyControl2Listener() {
+//        myControl2.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+//
+//            int progressChanged = 0;
+//
+//            @Override
+//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//                progressChanged = progress;
+//
+//                myTextView2.setText("The value is: "+((progress*2)-100));
+//            }
+//
+//            @Override
+//            public void onStartTrackingTouch(SeekBar seekBar) {
+//            }
+//
+//            @Override
+//            public void onStopTrackingTouch(SeekBar seekBar) {
+//
+//            }
+//        });
+//    }
 
     private final SerialInputOutputManager.Listener mListener =
             new SerialInputOutputManager.Listener() {
@@ -407,6 +406,7 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
             motorVals = new String(data, "UTF-8"); // put the data you got into a string
             if (motorVals.length() > 1 ) {
                 myTextView4.setText(motorVals);
+
             }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
