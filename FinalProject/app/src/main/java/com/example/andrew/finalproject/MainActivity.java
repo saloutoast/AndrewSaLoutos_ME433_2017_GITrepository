@@ -219,31 +219,32 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
             // Send motor control based on two com values
             int base_spd = 30;
             int err_bound_near = 2000;
-            int err_bound_far = 5;
+            int err_bound_far = 10;
             int err_near = com_near - (bmp.getWidth()/2);
             int err_far = com_far - (bmp.getWidth()/2);
             double gain_near = 0.2;
-            double gain_far = 0.4;
-            double correction_near = abs(err_near*gain_near);
-            double correction_far = abs(err_far*gain_far);
+            double gain_far = 0.2;
+            double correction_near = abs(err_near*gain_near)/2;
+            double correction_far = abs(err_far*gain_far)/2;
 
-            if (err_near > err_bound_near) {
-                String sendString = String.valueOf(base_spd-(correction_near/2)) + ',' + String.valueOf(base_spd+(correction_near/2)) + '\n';
-                try {
-                    sPort.write(sendString.getBytes(), 10); // 10 is the timeout
-                } catch (IOException e) { }
-            } else if (err_near < -err_bound_near) {
-                String sendString = String.valueOf(base_spd+(correction_near/2)) + ',' + String.valueOf(base_spd-(correction_near/2)) + '\n';
-                try {
-                    sPort.write(sendString.getBytes(), 10); // 10 is the timeout
-                } catch (IOException e) { }
-            } else if (err_far > err_bound_far) {
-                String sendString = String.valueOf(base_spd-(correction_far/2)) + ',' + String.valueOf(base_spd+(correction_far/2)) + '\n';
+//            if (err_near > err_bound_near) {
+//                String sendString = String.valueOf(base_spd-correction_near/) + ',' + String.valueOf(base_spd+correction_near) + '\n';
+//                try {
+//                    sPort.write(sendString.getBytes(), 10); // 10 is the timeout
+//                } catch (IOException e) { }
+//            } else if (err_near < -err_bound_near) {
+//                String sendString = String.valueOf(base_spd+correction_near) + ',' + String.valueOf(base_spd-correction_near) + '\n';
+//                try {
+//                    sPort.write(sendString.getBytes(), 10); // 10 is the timeout
+//                } catch (IOException e) { }
+//            } else
+            if (err_far > err_bound_far) {
+                String sendString = String.valueOf(base_spd-((int)correction_far)) + ',' + String.valueOf(base_spd+((int)correction_far)) + '\n';
                 try {
                     sPort.write(sendString.getBytes(), 10); // 10 is the timeout
                 } catch (IOException e) { }
             } else if (err_far < -err_bound_far) {
-                String sendString = String.valueOf(base_spd+(correction_far/2)) + ',' + String.valueOf(base_spd-(correction_far/2)) + '\n';
+                String sendString = String.valueOf(base_spd+ ((int)correction_far)) + ',' + String.valueOf(base_spd-((int)correction_far)) + '\n';
                 try {
                     sPort.write(sendString.getBytes(), 10); // 10 is the timeout
                 } catch (IOException e) { }
