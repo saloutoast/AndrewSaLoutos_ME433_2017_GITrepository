@@ -217,23 +217,38 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
             canvas.drawCircle(com_near, 3*(bmp.getHeight()/4), 10, paint1);
 
             // Send motor control based on two com values
-            int err_bound = 5;
-            int err = com_far - com_near;
-            double gain = 1.5;
-            double correction = abs(err*gain);
+            int base_spd = 40;
+            int err_bound_near = 25;
+            int err_bound_far = 5;
+            int err_near = com_near - (bmp.getWidth()/2);
+            int err_far = com_far - (bmp.getWidth()/2);
+            double gain_near = 1.5;
+            double gain_far = 0.5;
+            double correction_near = abs(err_near*gain_near);
+            double correction_far = abs(err_far*gain_far);
 
-            if (err > err_bound) { // if com_far > com_near by an amount... turn right
-                String sendString = String.valueOf(40-(correction/2)) + ',' + String.valueOf(40+(correction/2)) + '\n';
+            if (err_near > err_bound_near) {
+                String sendString = String.valueOf(base_spd-(correction_near/2)) + ',' + String.valueOf(base_spd+(correction_near/2)) + '\n';
                 try {
                     sPort.write(sendString.getBytes(), 10); // 10 is the timeout
                 } catch (IOException e) { }
-            } else if (err < -err_bound) { // if com_far < com_near by an amount... turn left
-                String sendString = String.valueOf(40+(correction/2)) + ',' + String.valueOf(40-(correction/2)) + '\n';
+            } else if (err_near < -err_bound_near) {
+                String sendString = String.valueOf(base_spd+(correction_near/2)) + ',' + String.valueOf(base_spd-(correction_near/2)) + '\n';
+                try {
+                    sPort.write(sendString.getBytes(), 10); // 10 is the timeout
+                } catch (IOException e) { }
+            } else if (err_far > err_bound_far) {
+                String sendString = String.valueOf(base_spd-(correction_far/2)) + ',' + String.valueOf(base_spd+(correction_far/2)) + '\n';
+                try {
+                    sPort.write(sendString.getBytes(), 10); // 10 is the timeout
+                } catch (IOException e) { }
+            } else if (err_far < -err_bound_far) {
+                String sendString = String.valueOf(base_spd+(correction_far/2)) + ',' + String.valueOf(base_spd-(correction_far/2)) + '\n';
                 try {
                     sPort.write(sendString.getBytes(), 10); // 10 is the timeout
                 } catch (IOException e) { }
             } else {// within bounds, keep going straight
-                String sendString = String.valueOf(40) + ',' + String.valueOf(40) + '\n';
+                String sendString = String.valueOf(base_spd) + ',' + String.valueOf(base_spd) + '\n';
                 try {
                     sPort.write(sendString.getBytes(), 10); // 10 is the timeout
                 } catch (IOException e) {
