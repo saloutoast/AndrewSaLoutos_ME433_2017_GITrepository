@@ -492,7 +492,13 @@ void APP_Tasks(void) {
                         double xPos = tan((V1.vertAng - 90.0) * DEG_TO_RAD) * LIGHTHOUSEHEIGHT;
                         double yPos = tan((V1.horzAng - 90.0) * DEG_TO_RAD) * LIGHTHOUSEHEIGHT;
                         
-                        OC3RS = 3500; // should set the motor to 60 degrees (0.5ms to 2.5ms is 1500 to 7500 for 0 to 180 degrees)
+                        if ((spdA-spdB) > 10) {
+                            OC3RS = 5750; // servo to 135 deg if turning right
+                        } else if((spdA-spdB) < -10) {
+                            OC3RS = 2250; // servo to 45 deg if turning left
+                        } else {
+                            OC3RS = 4000; // should set the motor to 90 degrees (0.5ms to 2.5ms is 1500 to 7500 for 0 to 180 degrees)
+                        }
 
                         break; // get out of the while loop
                     } else if (appData.readBuffer[ii] == 0) {
@@ -544,7 +550,7 @@ void APP_Tasks(void) {
             appData.state = APP_STATE_WAIT_FOR_WRITE_COMPLETE;
 
             if (gotRx) {
-                len = sprintf(dataOut, "got: %d, %d, %d, %d\r\n", spdA, spdB, OC1R, OC2R);
+                len = sprintf(dataOut, "got: %d, %d, %d, %d\r\n", spdA, spdB, xPos, yPos);
                 USB_DEVICE_CDC_Write(USB_DEVICE_CDC_INDEX_0,
                         &appData.writeTransferHandle,
                         dataOut, len,
