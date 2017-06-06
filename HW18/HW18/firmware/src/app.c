@@ -51,6 +51,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "app.h"
 #include <stdio.h>
 #include <xc.h>
+#include <math.h>
 
 // *****************************************************************************
 // *****************************************************************************
@@ -365,6 +366,38 @@ void APP_Initialize(void) {
 	T2CONbits.ON = 1;        // turn on Timer2
     OC1CONbits.ON = 1;       // turn on OC1
 	OC2CONbits.ON = 1;       // turn on OC2
+    
+    /* Set up timer 3 and OC4 pin for servo control*/
+    RPB2Rbits.RPB2R = 0b0101; // B2 is OC4
+    T3CONbits.TCKPS = 4; // prescaler N=16
+    PR3 = 60000 - 1; // 50Hz
+    TMR3 = 0;
+    OC4CONbits.OCM = 0b110; // PWM mode without fault pin; other OC1CON bits are defaults
+    OC4CONbits.OCTSEL = 1; // use timer3
+    OC4RS = 4500; // should set the motor to 90 degrees (0.5ms to 2.5ms is 1500 to 7500 for 0 to 180 degrees)
+    OC4R = 4500; // read-only
+    T3CONbits.ON = 1;
+    OC4CONbits.ON = 1;
+    
+    /* Set up IC4 pin for Vive sensor*/
+        // initialize the sensor variables
+    V1.prevMic = 0;
+    V1.horzAng = 0;
+    V1.vertAng = 0;
+    V1.useMe = 0;
+    V1.collected = 0;
+
+    TRISBbits.TRISB4 = 1; // connect the TS3633 ENV pin to B4
+    IC4Rbits.IC4R = 0b0010; // B4 is IC4 (input capture 4)
+    IC4CONbits.ICM = 1; // detect rising and falling edges
+    IC4CONbits.ICI = 0; // interrupt on an edge
+    IC4CONbits.ICTMR = 1; // store the value of timer2, but we're actually just using the interrupt and ignoring timer2
+    IC4CONbits.FEDGE = 0; // first event is falling edge, doesn't really matter
+    IC4CONbits.ON = 1;
+    IPC4bits.IC4IP = 5; // step 4: interrupt priority 5
+    IPC4bits.IC4IS = 1; // step 4: interrupt priority 1
+    IFS0bits.IC4IF = 0; // step 5: clear the int flag
+    IEC0bits.IC4IE = 1; // step 6: enable INT0 by setting IEC0<3>
 
     startTime = _CP0_GET_COUNT();
 }
@@ -454,6 +487,12 @@ void APP_Tasks(void) {
                             OC2RS = (-spdB * (PR2 + 1)) / 100;
                             LATBbits.LATB15 = 0;
                         }
+                        
+                        // something with vive position and/or servo
+                        double xPos = tan((V1.vertAng - 90.0) * DEG_TO_RAD) * LIGHTHOUSEHEIGHT;
+                        double yPos = tan((V1.horzAng - 90.0) * DEG_TO_RAD) * LIGHTHOUSEHEIGHT;
+                        
+                        OC3RS = 3500; // should set the motor to 60 degrees (0.5ms to 2.5ms is 1500 to 7500 for 0 to 180 degrees)
 
                         break; // get out of the while loop
                     } else if (appData.readBuffer[ii] == 0) {
