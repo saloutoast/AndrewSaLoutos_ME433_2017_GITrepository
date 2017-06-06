@@ -178,7 +178,9 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
                 int num_pix = 0;
                 // in the row, see if row is gray //there is more green than red and blue
                 for (int i = 0; i < bmp.getWidth(); i++) {
+                    // if ((green(pixles[i]) + blue(pixels[i]) + red(pixels[i])) < 700) { // try to filter out white points...assume they are bad, not assume they are good
                     if ((abs(green(pixels[i]) - red(pixels[i])) < thresh) && (abs(blue(pixels[i]) - red(pixels[i])) < thresh) && (abs(blue(pixels[i]) - green(pixels[i])) < thresh)) {
+                    // if ((red(pixels[i] - green(pixels[i]) < thresh) { // detect gray by finding if red is greater than green
                         pixels[i] = rgb(0, 255, 0); // over write the pixel with pure green
                         com_local = com_local + i; // add to center of mass
                         num_pix = num_pix + 1; // track number of points in com
@@ -215,9 +217,9 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
             canvas.drawCircle(com_near, 3*(bmp.getHeight()/4), 10, paint1);
 
             // Send motor control based on two com values
-            int err_bound = 10;
+            int err_bound = 5;
             int err = com_far - com_near;
-            double gain = 0.5;
+            double gain = 1.5;
             double correction = abs(err*gain);
 
             if (err > err_bound) { // if com_far > com_near by an amount... turn right
