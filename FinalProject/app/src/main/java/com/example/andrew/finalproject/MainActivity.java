@@ -218,13 +218,13 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
             canvas.drawCircle(com_near, 3*(bmp.getHeight()/4), 10, paint1);
 
             // Send motor control based on two com values
-            int base_spd = 45;
+            int base_spd = 35;
             int err_bound_near = 2000;
             int err_bound_far = 10;
             int err_near = com_near - (bmp.getWidth()/2);
             int err_far = com_far - (bmp.getWidth()/2);
             double gain_near = 0.2;
-            double gain_far = 0.2;
+            double gain_far = 0.16;
             double correction_near = abs(err_near*gain_near)/2;
             double correction_far = abs(err_far*gain_far)/2;
 
