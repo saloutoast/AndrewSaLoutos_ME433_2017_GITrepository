@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
             int far_pix = 0;
             int com_near = 0;
             int near_pix = 0;
-            for (int j = (bmp.getHeight()/8); j < (3*bmp.getHeight()/8); j+=5) {// index through every five rows
+            for (int j = (3*bmp.getHeight()/8); j < (5*bmp.getHeight()/8); j+=5) {// index through every five rows
                 int[] pixels = new int[bmp.getWidth()]; // pixels[] is the RGBA data
                 int startY = j; // which row in the bitmap to analyze to read
                 bmp.getPixels(pixels, 0, bmp.getWidth(), 0, startY, bmp.getWidth(), 1);
@@ -224,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
             int err_near = com_near - (bmp.getWidth()/2);
             int err_far = com_far - (bmp.getWidth()/2);
             double gain_near = 0.2;
-            double gain_far = 0.12;
+            double gain_far = 0.14;
             double correction_near = abs(err_near*gain_near)/2;
             double correction_far = abs(err_far*gain_far)/2;
 
