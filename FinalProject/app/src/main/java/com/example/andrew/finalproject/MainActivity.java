@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
             int far_pix = 0;
             int com_near = 0;
             int near_pix = 0;
-            for (int j = 0; j < bmp.getHeight()/2; j+=5) {// index through every five rows
+            for (int j = bmp.getHeight()/8; j < (3*bmp.getHeight()/8); j+=5) {// index through every five rows
                 int[] pixels = new int[bmp.getWidth()]; // pixels[] is the RGBA data
                 int startY = j; // which row in the bitmap to analyze to read
                 bmp.getPixels(pixels, 0, bmp.getWidth(), 0, startY, bmp.getWidth(), 1);
@@ -178,12 +178,13 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
                 int num_pix = 0;
                 // in the row, see if row is gray //there is more green than red and blue
                 for (int i = 0; i < bmp.getWidth(); i++) {
-                    // if ((green(pixles[i]) + blue(pixels[i]) + red(pixels[i])) < 700) { // try to filter out white points...assume they are bad, not assume they are good
-                    if ((abs(green(pixels[i]) - red(pixels[i])) < thresh) && (abs(blue(pixels[i]) - red(pixels[i])) < thresh) && (abs(blue(pixels[i]) - green(pixels[i])) < thresh)) {
-                    // if ((red(pixels[i] - green(pixels[i]) < thresh) { // detect gray by finding if red is greater than green
-                        pixels[i] = rgb(0, 255, 0); // over write the pixel with pure green
-                        com_local = com_local + i; // add to center of mass
-                        num_pix = num_pix + 1; // track number of points in com
+                    if ((green(pixels[i]) + blue(pixels[i]) + red(pixels[i])) < 700) { // try to filter out white points...assume they are bad, not assume they are good
+                        if ((abs(green(pixels[i]) - red(pixels[i])) < thresh) && (abs(blue(pixels[i]) - red(pixels[i])) < thresh) && (abs(blue(pixels[i]) - green(pixels[i])) < thresh)) {
+                            // if ((red(pixels[i] - green(pixels[i]) < thresh) { // detect gray by finding if red is greater than green
+                            pixels[i] = rgb(0, 255, 0); // over write the pixel with pure green
+                            com_local = com_local + i; // add to center of mass
+                            num_pix = num_pix + 1; // track number of points in com
+                        }
                     }
                 }
 
@@ -217,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
             canvas.drawCircle(com_near, 3*(bmp.getHeight()/4), 10, paint1);
 
             // Send motor control based on two com values
-            int base_spd = 30;
+            int base_spd = 45;
             int err_bound_near = 2000;
             int err_bound_far = 10;
             int err_near = com_near - (bmp.getWidth()/2);

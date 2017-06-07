@@ -70,6 +70,9 @@ int gotRx = 0; // the flag
 signed int spdA = 0; // store the two percent speeds from the usb input
 signed int spdB = 0;
 
+double xPos = 0;
+double yPos = 0;
+
 // *****************************************************************************
 /* Application Data
   Summary:
@@ -489,15 +492,15 @@ void APP_Tasks(void) {
                         }
                         
                         // something with vive position and/or servo
-                        double xPos = tan((V1.vertAng - 90.0) * DEG_TO_RAD) * LIGHTHOUSEHEIGHT; // get vive position
-                        double yPos = tan((V1.horzAng - 90.0) * DEG_TO_RAD) * LIGHTHOUSEHEIGHT;
+                        xPos = tan((V1.vertAng - 90.0) * DEG_TO_RAD) * LIGHTHOUSEHEIGHT; // get vive position
+                        yPos = tan((V1.horzAng - 90.0) * DEG_TO_RAD) * LIGHTHOUSEHEIGHT;
                         
-                        if ((spdA-spdB) > 10) { // have servo point roughly in the direction the robot is going
+                        if ((spdA-spdB) > 0) { // have servo point roughly in the direction the robot is going
                             OC3RS = 5750; // servo to 135 deg if turning right
-                        } else if((spdA-spdB) < -10) {
+                        } else if((spdA-spdB) < 0) {
                             OC3RS = 2250; // servo to 45 deg if turning left
                         } else {
-                            OC3RS = 4000; // should set the motor to 90 degrees (0.5ms to 2.5ms is 1500 to 7500 for 0 to 180 degrees)
+                            OC3RS = 4500; // should set the motor to 90 degrees (0.5ms to 2.5ms is 1500 to 7500 for 0 to 180 degrees)
                         }
 
                         break; // get out of the while loop
