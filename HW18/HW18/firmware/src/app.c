@@ -489,10 +489,10 @@ void APP_Tasks(void) {
                         }
                         
                         // something with vive position and/or servo
-                        double xPos = tan((V1.vertAng - 90.0) * DEG_TO_RAD) * LIGHTHOUSEHEIGHT;
+                        double xPos = tan((V1.vertAng - 90.0) * DEG_TO_RAD) * LIGHTHOUSEHEIGHT; // get vive position
                         double yPos = tan((V1.horzAng - 90.0) * DEG_TO_RAD) * LIGHTHOUSEHEIGHT;
                         
-                        if ((spdA-spdB) > 10) {
+                        if ((spdA-spdB) > 10) { // have servo point roughly in the direction the robot is going
                             OC3RS = 5750; // servo to 135 deg if turning right
                         } else if((spdA-spdB) < -10) {
                             OC3RS = 2250; // servo to 45 deg if turning left
