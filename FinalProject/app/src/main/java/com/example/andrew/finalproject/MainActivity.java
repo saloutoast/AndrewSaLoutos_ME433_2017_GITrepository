@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
             int far_pix = 0;
             int com_near = 0;
             int near_pix = 0;
-            for (int j = (bmp.getHeight()/4); j < (bmp.getHeight()/2); j+=5) {// index through every five rows
+            for (int j = (bmp.getHeight()/8); j < (3*bmp.getHeight()/8); j+=5) {// index through every five rows
                 int[] pixels = new int[bmp.getWidth()]; // pixels[] is the RGBA data
                 int startY = j; // which row in the bitmap to analyze to read
                 bmp.getPixels(pixels, 0, bmp.getWidth(), 0, startY, bmp.getWidth(), 1);
@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
                 int num_pix = 0;
                 // in the row, see if row is gray //there is more green than red and blue
                 for (int i = 0; i < bmp.getWidth(); i++) {
-                    if ((green(pixels[i]) + blue(pixels[i]) + red(pixels[i])) < 700) { // try to filter out white points...assume they are bad, not assume they are good
+                    if ((green(pixels[i]) + blue(pixels[i]) + red(pixels[i])) < 720) { // try to filter out white points...assume they are bad, not assume they are good
                         if ((abs(green(pixels[i]) - red(pixels[i])) < thresh) && (abs(blue(pixels[i]) - red(pixels[i])) < thresh) && (abs(blue(pixels[i]) - green(pixels[i])) < thresh)) {
                             // if ((red(pixels[i] - green(pixels[i]) < thresh) { // detect gray by finding if red is greater than green
                             pixels[i] = rgb(0, 255, 0); // over write the pixel with pure green
