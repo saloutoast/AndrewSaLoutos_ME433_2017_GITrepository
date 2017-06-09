@@ -70,8 +70,8 @@ int gotRx = 0; // the flag
 signed int spdA = 0; // store the two percent speeds from the usb input
 signed int spdB = 0;
 
-double xPos = 0;
-double yPos = 0;
+float xPos = 0;
+float yPos = 0;
 
 // *****************************************************************************
 /* Application Data
@@ -553,7 +553,7 @@ void APP_Tasks(void) {
             appData.state = APP_STATE_WAIT_FOR_WRITE_COMPLETE;
 
             if (gotRx) {
-                len = sprintf(dataOut, "got: %d, %d, %d, %d\r\n", spdA, spdB, xPos, yPos);
+                len = sprintf(dataOut, "got: %d, %d, %f, %f\r\n", spdA, spdB, xPos, yPos);
                 USB_DEVICE_CDC_Write(USB_DEVICE_CDC_INDEX_0,
                         &appData.writeTransferHandle,
                         dataOut, len,

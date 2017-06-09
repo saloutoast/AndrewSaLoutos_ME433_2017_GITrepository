@@ -38,6 +38,7 @@ import com.hoho.android.usbserial.util.SerialInputOutputManager;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -79,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
     private SerialInputOutputManager mSerialIoManager;
 
     static long prevtime = 0; // for FPS calculation
+    double prev_error = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,8 +133,11 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
         mCamera = Camera.open();
         Camera.Parameters parameters = mCamera.getParameters();
         parameters.setPreviewSize(640, 480);
-        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_INFINITY); // no autofocusing
-        parameters.setAutoExposureLock(true); // keep the white balance constant
+        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO); // no autofocusing
+        parameters.setWhiteBalance(Camera.Parameters.WHITE_BALANCE_AUTO);
+        //parameters.setAutoExposureLock(true); // keep the white balance constant
+        //parameters.setSceneMode()
+
         mCamera.setParameters(parameters);
         mCamera.setDisplayOrientation(90); // rotate to portrait mode
 
@@ -176,14 +181,18 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
 
                 int com_local = 0;
                 int num_pix = 0;
+                int edge_flag = 0;
                 // in the row, see if row is gray //there is more green than red and blue
                 for (int i = 0; i < bmp.getWidth(); i++) {
-                    if ((green(pixels[i]) + blue(pixels[i]) + red(pixels[i])) < 720) { // try to filter out white points...assume they are bad, not assume they are good
-                        if ((abs(green(pixels[i]) - red(pixels[i])) < thresh) && (abs(blue(pixels[i]) - red(pixels[i])) < thresh) && (abs(blue(pixels[i]) - green(pixels[i])) < thresh)) {
-                            // if ((red(pixels[i] - green(pixels[i]) < thresh) { // detect gray by finding if red is greater than green
-                            pixels[i] = rgb(0, 255, 0); // over write the pixel with pure green
-                            com_local = com_local + i; // add to center of mass
-                            num_pix = num_pix + 1; // track number of points in com
+                    if (red(pixels[i]) > 160) { edge_flag = 1; }
+                    if (edge_flag == 1) {
+                        if (((green(pixels[i]) + blue(pixels[i]) + red(pixels[i])) < 600) && red(pixels[i]) > 160) {// && ((green(pixels[i]) + blue(pixels[i]) + red(pixels[i])) > 550)) { // try to filter out white points...assume they are bad, not assume they are good
+                            if ((abs(green(pixels[i]) - red(pixels[i])) < thresh) && (abs(blue(pixels[i]) - red(pixels[i])) < thresh) && (abs(blue(pixels[i]) - green(pixels[i])) < thresh)) {
+                            //if ((green(pixels[i]) < (red(pixels[i]) + thresh))) { // && ((red(pixels[i]) - blue(pixels[i])) > thresh)) { // detect gray by finding if red is greater than green
+                                pixels[i] = rgb(0, 255, 0); // over write the pixel with pure green
+                                com_local = com_local + i; // add to center of mass
+                                num_pix = num_pix + 1; // track number of points in com
+                            }
                         }
                     }
                 }
@@ -218,15 +227,18 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
             canvas.drawCircle(com_near, 3*(bmp.getHeight()/4), 10, paint1);
 
             // Send motor control based on two com values
-            int base_spd = 35;
+            int base_spd = 55;// 70; // Good: 55;
             int err_bound_near = 2000;
             int err_bound_far = 10;
             int err_near = com_near - (bmp.getWidth()/2);
             int err_far = com_far - (bmp.getWidth()/2);
             double gain_near = 0.2;
-            double gain_far = 0.16;
+            double gain_far = 0.2;// 0.28; // Good: 0.2;
+            double gain_deriv = 0.15; //0.21; // Good: 0.15;
             double correction_near = abs(err_near*gain_near)/2;
-            double correction_far = abs(err_far*gain_far)/2;
+            double correction_far = (err_far*gain_far/2) + ((err_far-prev_error)*gain_deriv);
+            if (correction_far > 100) {correction_far = 100;} else if (correction_far < -100) {correction_far = -100;}
+
 
 //            if (err_near > err_bound_near) {
 //                String sendString = String.valueOf(base_spd-correction_near/) + ',' + String.valueOf(base_spd+correction_near) + '\n';
@@ -239,22 +251,27 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
 //                    sPort.write(sendString.getBytes(), 10); // 10 is the timeout
 //                } catch (IOException e) { }
 //            } else
-            if (err_far > err_bound_far) {
-                String sendString = String.valueOf(base_spd-((int)correction_far)) + ',' + String.valueOf(base_spd+((int)correction_far)) + '\n';
-                try {
-                    sPort.write(sendString.getBytes(), 10); // 10 is the timeout
-                } catch (IOException e) { }
-            } else if (err_far < -err_bound_far) {
-                String sendString = String.valueOf(base_spd+ ((int)correction_far)) + ',' + String.valueOf(base_spd-((int)correction_far)) + '\n';
-                try {
-                    sPort.write(sendString.getBytes(), 10); // 10 is the timeout
-                } catch (IOException e) { }
-            } else {// within bounds, keep going straight
-                String sendString = String.valueOf(base_spd) + ',' + String.valueOf(base_spd) + '\n';
-                try {
-                    sPort.write(sendString.getBytes(), 10); // 10 is the timeout
-                } catch (IOException e) {
+            if (com_far != 0) {
+                if (correction_far > 0) {
+                    String sendString = String.valueOf(base_spd - ((int) correction_far)) + ',' + String.valueOf(base_spd + ((int) correction_far)) + '\n';
+                    try {
+                        sPort.write(sendString.getBytes(), 10); // 10 is the timeout
+                    } catch (IOException e) {
+                    }
+                } else if (correction_far < 0) {
+                    String sendString = String.valueOf(base_spd - ((int) correction_far)) + ',' + String.valueOf(base_spd + ((int) correction_far)) + '\n';
+                    try {
+                        sPort.write(sendString.getBytes(), 10); // 10 is the timeout
+                    } catch (IOException e) {
+                    }
+                } else {// within bounds, keep going straight
+                    String sendString = String.valueOf(base_spd) + ',' + String.valueOf(base_spd) + '\n';
+                    try {
+                        sPort.write(sendString.getBytes(), 10); // 10 is the timeout
+                    } catch (IOException e) {
+                    }
                 }
+                prev_error = err_far;
             }
         }
 
@@ -420,12 +437,11 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
         //do something with received data
 
         //for displaying:
-        String motorVals = null;
+        String PICdata = null;
         try {
-            motorVals = new String(data, "UTF-8"); // put the data you got into a string
-            if (motorVals.length() > 1 ) {
-                myTextView4.setText(motorVals);
-
+            PICdata = new String(data, "UTF-8"); // put the data you got into a string
+            if (PICdata.length() > 1 ) {
+                myTextView4.setText(PICdata);
             }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
